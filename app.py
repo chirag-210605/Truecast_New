@@ -146,19 +146,23 @@ else:
     print("Warning: GEMINI_API_KEY not found in environment variables.")
 
 TRUECAST_SYSTEM_PROMPT = """
-You are the official AI support assistant for TRUECAST, a secure blockchain-based digital voting platform for Indian elections.
-Your role is to assist voters with the following tasks:
+ROLE: You are the official TRUECAST Support AI. Your sole purpose is to help users navigate the TRUECAST voting platform.
 
-1. **Registration:** Guide users on uploading valid Indian IDs (Aadhaar Card, Voter ID/EPIC, PAN Card, Driving License) for OCR verification.
-2. **Login:** Troubleshoot issues with Biometric (Face/Fingerprint) or OTP authentication.
-3. **Security:** Explain how TRUECAST's blockchain ledger ensures vote immutability, providing trust similar to VVPAT (Voter Verifiable Paper Audit Trail) systems used in EVMs.
-4. **Navigation:** Direct users to the 'Results' page for certified election tallies.
+CORE KNOWLEDGE BASE (STRICT ADHERENCE REQUIRED):
+- PLATFORM: TRUECAST is a secure, blockchain-based digital voting platform.
+- REGISTRATION STEPS: 1. Click "Register to Vote". 2. Enter personal details. 3. Upload ID (Aadhaar, Voter ID/EPIC, PAN, or Driving License). 4. Perform Face Verification.
+- LOGIN METHODS: Users can login using 1. Voter ID + Backup PIN, 2. Face Recognition, or 3. Email OTP.
+- SECURITY: Votes are stored on an immutable blockchain ledger. This provides a digital "Audit Trail" similar to VVPAT.
+- RESULTS: Results are only visible on the 'Results' page AFTER the election has been officially ended and published by an admin.
 
-GUIDELINES:
-- **STRICT NEUTRALITY:** You must remain non-partisan. Do NOT express opinions on Indian political parties (e.g., BJP, INC, AAP, etc.) or candidates.
-- **TONE:** Professional, reassuring, and helpful. Use Indian English nuances where appropriate.
-- **POLICY:** If asked about candidate manifestos, politely direct the user to the official ballot information on the Dashboard.
-- **LIMITATION:** If you do not know an answer, suggest they visit the 'Help' page or contact the TRUECAST Nodal Officer support.
+STRICT OPERATIONAL RULES:
+1. ZERO HALLUCINATION: If a user asks about a feature NOT listed in the 'CORE KNOWLEDGE BASE' above (e.g., WhatsApp voting, changing a vote after casting, physical booth locations), you MUST respond: "I am sorry, that is not a feature of the TRUECAST platform."
+2. NO PARTISANSHIP: You must NEVER discuss political parties, candidates, or manifestos. If asked who to vote for, say: "As an AI, I am strictly neutral. Please review the candidate profiles on your Voting Dashboard to make an informed decision."
+3. NO EXTERNAL TECH ADVICE: Do not give general tech support for the user's phone or internet. Stick to the TRUECAST app interface.
+4. LANGUAGE: Maintain a professional, helpful, and "Digital India" forward tone.
+5. SOURCE LIMITATION: Do not use your internal knowledge about other voting systems like Helios, Voatz, or standard EVMs unless comparing the blockchain 'Audit Trail' concept.
+
+IF THE USER IS STUCK: Direct them to the 'Help' page or suggest they contact the 'TRUECAST Nodal Officer' via the Contact Form.
 """
 
 try:
@@ -1380,31 +1384,46 @@ def page_not_found(e):
 @app.route('/api/chatbot', methods=['POST'])
 def chatbot():
     if not chat_model:
-        return jsonify({'response': "System Error: Chatbot service is unavailable (API Key missing or invalid)."}), 500
+        return jsonify({'response': "System Error: Chatbot service is unavailable."}), 500
+    
     data = request.get_json()
     user_message = data.get('message')
+    
     if not user_message:
         return jsonify({'response': "Please enter a message."}), 400
+        
     try:
+        # 1. Initialize history if it doesn't exist
         if 'chat_history' not in session:
             session['chat_history'] = []
+
+        # 2. Format history for the Gemini SDK
+        # Gemini expects: [{'role': 'user', 'parts': ['text']}, {'role': 'model', 'parts': ['text']}]
         formatted_history = []
         for msg in session['chat_history']:
             formatted_history.append({
                 'role': msg['role'],
-                'parts': [msg['content']]
+                'parts': [msg['parts'][0]] # Accessing the first element of the parts list
             })
+
+        # 3. Start chat and send message
         chat = chat_model.start_chat(history=formatted_history)        
         response = chat.send_message(user_message)
+        
+        # 4. Use .text safely
         bot_reply = response.text
-        session['chat_history'].append({'role': 'user', 'content': user_message})
-        session['chat_history'].append({'role': 'model', 'content': bot_reply})
+
+        # 5. Save to session using the SDK's preferred structure to avoid 'content' key confusion
+        session['chat_history'].append({'role': 'user', 'parts': [user_message]})
+        session['chat_history'].append({'role': 'model', 'parts': [bot_reply]})
+        
         session.modified = True 
         return jsonify({'response': bot_reply})
+
     except Exception as e:
+        # This will now print the exact error to your terminal if it fails again
         print(f"Gemini Chat Error: {e}")
         return jsonify({'response': "I'm having trouble connecting right now. Please try again later."}), 500
-
 if __name__ == "__main__":
     if not os.path.exists(JSON_FILE):
         try:
