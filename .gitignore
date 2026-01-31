@@ -1,0 +1,20 @@
+# Credentials & Secrets
+serviceAccountKey.json
+.env
+key.py
+
+# Personal Images/Identity
+passport.jpg
+WhatsApp Image*
+*.jpg
+*.jpeg
+*.png
+
+# Local Databases (Keep these out of GitHub)
+voters.json
+votes.json
+elections.json
+
+# Python System Files
+__pycache__/
+*.pyc

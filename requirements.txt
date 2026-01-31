@@ -1,0 +1,11 @@
+flask
+python-dotenv
+easyocr
+opencv-python-headless
+numpy
+google-generativeai
+flask-mail
+bcrypt
+cryptography
+deepface
+tf-keras

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRUECAST - Contact Us</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .contact-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+            max-width: 700px;
+            width: 100%;
+            padding: 3rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .success-message {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #15803d;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            display: none;
+            text-align: center;
+        }
+        
+        .error-message {
+            background: #fef2f2;
+            border: 1px solid #fca5a5;
+            color: #dc2626;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+            display: none;
+            text-align: center;
+        }
+
+        .contact-info {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .contact-info a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .contact-info a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="contact-container">
+        <div class="header">
+            <h1>✉️ Contact Us</h1>
+            <p>We're here to help! Send us a message or get in touch through our contact details below.</p>
+        </div>
+        
+        <form id="contactForm">
+            <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" required placeholder="Enter your full name">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Your Email Address</label>
+                <input type="email" id="email" name="email" required placeholder="Enter a valid email address">
+            </div>
+
+            <div class="form-group">
+                <label for="subject">Subject</label>
+                <input type="text" id="subject" name="subject" required placeholder="Briefly describe your inquiry">
+            </div>
+
+            <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="5" required placeholder="Write your message here..."></textarea>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Send Message</button>
+
+            <div class="success-message" id="successMessage">
+                Your message has been sent successfully. We will get back to you shortly!
+            </div>
+            <div class="error-message" id="errorMessage">
+                Please fill in all required fields.
+            </div>
+        </form>
+
+        <div class="contact-info">
+            <p>You can also reach us at:</p>
+            <p>Email: <a href="mailto:support@truecast.com">support@truecast.com</a></p>
+            <p>Phone: +1 (555) 123-4567</p>
+            <p style="margin-top: 1rem;"><a href="/">Back to Home</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+
+            const errorMessageDiv = document.getElementById('errorMessage');
+            const successMessageDiv = document.getElementById('successMessage');
+
+            // Simple validation
+            if (!name || !email || !subject || !message) {
+                errorMessageDiv.style.display = 'block';
+                successMessageDiv.style.display = 'none';
+                return;
+            }
+
+            // In a real application, you would send this data to your Flask backend
+            // for processing, likely with a fetch() call.
+            // For this demo, we will just simulate a successful submission.
+            
+            errorMessageDiv.style.display = 'none';
+            successMessageDiv.style.display = 'block';
+            
+            // Clear the form after a successful submission
+            this.reset();
+        });
+    </script>
+</body>
+</html>

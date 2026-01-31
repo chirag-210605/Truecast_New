@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRUECAST - About Us</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 15px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            line-height: 1.6;
+            color: #34495e;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section h2 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 0.5rem;
+        }
+
+        .section h3 {
+            font-size: 1.5rem;
+            color: #34495e;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .principle-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .principle-icon {
+            font-size: 2.5rem;
+            color: #3498db;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .team-member {
+            text-align: center;
+        }
+
+        .team-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: #e9ecef;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: #7f8c8d;
+        }
+
+        .team-member h4 {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 0.3rem;
+        }
+
+        .team-member p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 2rem;
+            }
+            .principles-grid, .team-grid {
+                grid-template-columns: 1fr;
+            }
+            .section h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌐 About TRUECAST</h1>
+            <p>Our mission to build a more secure and transparent democratic process</p>
+        </div>
+
+        <div class="main-content">
+            <div class="section">
+                <h2>Our Vision</h2>
+                <p>
+                    TRUECAST was born out of a belief that technology can and should be used to strengthen democracy. Our vision is to create a digital voting platform that is so secure, transparent, and easy to use that it restores public trust in the electoral process. We aim to eliminate the vulnerabilities of traditional voting systems, ensuring every citizen's voice is heard and counted accurately.
+                </p>
+            </div>
+
+            <div class="section">
+                <h2>Core Principles</h2>
+                <div class="principles-grid">
+                    <div class="principle-card">
+                        <div class="principle-icon">⛓️</div>
+                        <h3>Security</h3>
+                        <p>Leveraging blockchain's immutable ledger to protect against fraud and tampering.</p>
+                    </div>
+                    <div class="principle-card">
+                        <div class="principle-icon">🔍</div>
+                        <h3>Transparency</h3>
+                        <p>Providing public auditability for every vote without compromising voter anonymity.</p>
+                    </div>
+                    <div class="principle-card">
+                        <div class="principle-icon">♿</div>
+                        <h3>Accessibility</h3>
+                        <p>Designing an intuitive interface that is universally accessible to all voters, regardless of ability or language.</p>
+                    </div>
+                    <div class="principle-card">
+                        <div class="principle-icon">✅</div>
+                        <h3>Integrity</h3>
+                        <p>Ensuring every step of the process, from registration to vote counting, is verifiable and trustworthy.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>The Team</h2>
+                <p>
+                    We are a dedicated group of engineers, designers, and political scientists committed to modernizing elections. We combine expertise in blockchain technology, cybersecurity, and user experience to deliver a robust and reliable platform.
+                </p>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <div class="team-photo">👨‍💻</div>
+                        <h4>Jane Doe</h4>
+                        <p>Lead Blockchain Architect</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="team-photo">👩‍💼</div>
+                        <h4>John Smith</h4>
+                        <p>Head of Product Design</p>
+                    </div>
+                    <div class="team-member">
+                        <div class="team-photo">👨‍🔬</div>
+                        <h4>Dr. Elena Rodriguez</h4>
+                        <p>Chief Security Officer</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-links">
+            <a href="/">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

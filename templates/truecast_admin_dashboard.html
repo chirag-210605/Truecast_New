@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TRUECAST - Admin Dashboard</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f5f7fa;
+        min-height: 100vh;
+      }
+      .header {
+        background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        color: white;
+        padding: 1rem 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .header-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+      .admin-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      .admin-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+      }
+      .nav-tabs {
+        display: flex;
+        list-style: none;
+        gap: 0.5rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 25px;
+        padding: 0.5rem;
+      }
+      .nav-tab {
+        padding: 0.5rem 1rem;
+        color: white;
+        text-decoration: none;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      .nav-tab.active,
+      .nav-tab:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem 20px;
+      }
+      .tab-content {
+        display: none;
+      }
+      .tab-content.active {
+        display: block;
+      }
+      .stats-overview {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+      .stat-card {
+        background: white;
+        border-radius: 15px;
+        padding: 1.5rem;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        position: relative;
+        overflow: hidden;
+      }
+      .stat-card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(135deg, #3498db 0%, #27ae60 100%);
+      }
+      .stat-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+      .stat-icon {
+        font-size: 2rem;
+        opacity: 0.7;
+      }
+      .stat-value {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+      }
+      .stat-label {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+      }
+      .monitoring-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 2rem;
+        margin-bottom: 2rem;
+      }
+      .chart-container,
+      .activity-feed,
+      .data-table,
+      .election-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+      }
+      .chart-placeholder {
+        height: 300px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #7f8c8d;
+      }
+      .activity-feed {
+        max-height: 400px;
+        overflow-y: auto;
+      }
+      .activity-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem;
+        border-bottom: 1px solid #f1f3f4;
+      }
+      .activity-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+      }
+      .activity-icon.registration {
+        background: #f0fdf4;
+        color: #27ae60;
+      }
+      .activity-content {
+        flex: 1;
+      }
+      .activity-title {
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.3rem;
+      }
+      .activity-description {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+      }
+      .management-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+      .search-input {
+        padding: 0.75rem;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        width: 300px;
+      }
+      .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .btn-success {
+        background: #27ae60;
+        color: white;
+      }
+      .btn-primary {
+        background: #3498db;
+        color: white;
+      }
+      .btn-danger {
+        background: #e74c3c;
+        color: white;
+      }
+      .table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      .table th,
+      .table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #f1f3f4;
+      }
+      .table th {
+        background: #f8f9fa;
+        font-weight: 600;
+        color: #2c3e50;
+      }
+      .status-badge {
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+      .status-active {
+        background: #d1fae5;
+        color: #059669;
+      }
+      .status-ended {
+        background: #fef2f2;
+        color: #b91c1c;
+      }
+      .election-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+      .election-title {
+        font-size: 1.5rem;
+        color: #2c3e50;
+      }
+      .election-status {
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.8rem;
+      }
+      .election-active {
+        background: #d1fae5;
+        color: #059669;
+      }
+      .election-details {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+        margin: 1.5rem 0;
+      }
+      .election-detail-value {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #3498db;
+      }
+      .election-detail-label {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+      }
+      .election-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+      }
+      .election-list-card {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+        border-bottom: 1px solid #f1f3f4;
+      }
+      .election-list-card:last-child {
+        border-bottom: none;
+      }
+      .election-list-info h4 {
+        margin: 0;
+        color: #2c3e50;
+      }
+      .election-list-info small {
+        color: #7f8c8d;
+      }
+      .admin-info .btn-danger {
+        background: #e74c3c;
+        color: white;
+        font-weight: 500;
+        border-radius: 6px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: background 0.2s;
+      }
+
+      .admin-info .btn-danger:hover {
+        background: #c0392b;
+      }
+      
+      /* NEW: Flash Message Styles for Audit Results */
+      .flash-message {
+        padding: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+        font-weight: 600;
+        border: 1px solid transparent;
+      }
+      .flash-success {
+        background-color: #d1fae5;
+        color: #059669;
+        border-color: #a7f3d0;
+      }
+      .flash-error {
+        background-color: #fef2f2;
+        color: #b91c1c;
+        border-color: #fca5a5;
+      }
+      .status-published {
+      background: #ccfbf1; /* Light cyan/teal */
+      color: #0f766e; /* Dark teal */
+      }
+
+      /* Ensure the button is small for the table */
+      .btn-sm {
+          padding: 0.4rem 0.8rem;
+          font-size: 0.8rem;
+          line-height: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="header-content">
+        <div class="logo">🗳️ TRUECAST Admin</div>
+        <nav>
+          <ul class="nav-tabs">
+            <li>
+              <a href="#" class="nav-tab active" onclick="showTab('overview')"
+                >Overview</a
+              >
+            </li>
+            <li>
+              <a href="#" class="nav-tab" onclick="showTab('voters')"
+                >Voter Management</a
+              >
+            </li>
+            <li>
+              <a href="#" class="nav-tab" onclick="showTab('elections')"
+                >Elections</a
+              >
+            </li>
+          </ul>
+        </nav>
+        <div class="admin-info">
+          <div class="admin-avatar">👤</div>
+          <div>Admin Panel</div>
+          <a 
+            href="{{ url_for('admin_logout') }}" 
+            class="btn btn-danger" 
+            style="padding: 0.5rem 1rem; margin-left: 1rem;"
+          >Logout</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="flash-message flash-{{ category }}" style="margin-bottom: 2rem;">
+                    {% if category == 'success' %}
+                        ✅
+                    {% elif category == 'error' %}
+                        ⚠️
+                    {% endif %}
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+    <div class="tab-content active" id="overview">
+        <div class="stats-overview">
+            <div class="stat-card">
+                <div class="stat-header"><span class="stat-icon">👥</span></div>
+                <div class="stat-value">{{ total_voters }}</div>
+                <div class="stat-label">Registered Voters</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header"><span class="stat-icon">🗳️</span></div>
+                <div class="stat-value">{{ total_votes_cast }}</div>
+                <div class="stat-label">Total Votes Cast (All Elections)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header"><span class="stat-icon">📊</span></div>
+                <div class="stat-value">{{ turnout | round(2) }}%</div>
+                <div class="stat-label">Overall Turnout Rate</div>
+            </div>
+            <div class="stat-card" style="border-left: 4px solid #f1c40f;">
+                <div class="stat-header"><span class="stat-icon">🥇</span></div>
+                <div class="stat-value">{{ active_election_races }} / {{ active_election_candidates }}</div>
+                <div class="stat-label">Active Races / Candidates</div>
+            </div>
+            </div>
+
+        <div class="monitoring-grid">
+            <div class="chart-container">
+                <h3 style="color: #2c3e50; margin-bottom: 1rem">Election Data Visualization</h3>
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <select id="electionSelector" class="search-input" style="width: 100%;" onchange="fetchChartData(this.value)">
+                        <option value="N/A" disabled>--- Select an Election ---</option>
+                        {% for election in all_elections_list %}
+                            <option value="{{ election.id }}" {% if election.id == initial_election_id %}selected{% endif %}>
+                                {{ election.title }} ({% if election.published_results %}Published{% else %}{{ election.status }}{% endif %})
+                            </option>
+                        {% endfor %}
+                        {% if not all_elections_list %}
+                            <option value="N/A">No Elections Found</option>
+                        {% endif %}
+                    </select>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;">
+                    <div>
+                        <h4 id="barChartTitle" style="color: #3498db; margin-bottom: 0.5rem;">Vote Distribution (Top Race)</h4>
+                        <div style="height: 300px;"><canvas id="barChart"></canvas></div>
+                    </div>
+                    <div>
+                        <h4 style="color: #3498db; margin-bottom: 0.5rem;">Voter Turnout Overview</h4>
+                        <div style="width: 250px; margin: 0 auto;"><canvas id="pieChart"></canvas></div>
+                    </div>
+                </div>
+            </div>
+            <div class="activity-feed">
+                <h3 style="color: #2c3e50; margin-bottom: 1rem">
+                    Recent Registrations
+                </h3>
+                {% for voter in recent_registrations %}
+                <div class="activity-item">
+                    <div class="activity-icon registration">👤</div>
+                    <div class="activity-content">
+                        <div class="activity-title">
+                            {{ voter.firstName }} {{ voter.lastName }}
+                        </div>
+                        <div class="activity-description">
+                            Voter ID: {{ voter.voter_id }}
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <p>No recent registrations.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="voters">
+        <div class="management-header">
+            <h2>Voter Management ({{ all_voters | length }} Registered)</h2>
+            <input 
+                type="text" 
+                id="voterSearch" 
+                class="search-input" 
+                placeholder="Search by ID or Name..." 
+            />
+        </div>
+
+        <div class="data-table">
+            <table class="table" id="voterTable">
+                <thead>
+                    <tr>
+                        <th>Voter ID</th>
+                        <th>Name</th>
+                        <th>Region</th>
+                        <th>Registration Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for voter in all_voters %}
+                    <tr>
+                        <td>{{ voter.voter_id }}</td>
+                        <td>{{ voter.firstName }} {{ voter.lastName }}</td>
+                        
+                        <td>{{ voter.voterRegion }}</td>
+                        <td>{{ voter.registration_date.split('T')[0] }}</td>
+                        <td>
+                            <span class="status-badge 
+                                {% if voter.status == 'Active' %}status-active{% else %}status-ended{% endif %}">
+                                {{ voter.status }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" style="text-align: center;">No registered voters found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="tab-content" id="elections">
+        <div class="management-header">
+            <h2>Election Management</h2>
+            <div style="display: flex; gap: 10px;">
+            
+                <a href="/admin/create-election" class="btn btn-success">Create New Election</a>
+            </div>
+        </div>
+        
+        <div class="data-table">
+            <table class="table" id="electionTable">
+                <thead>
+                    <tr>
+                        <th>Election Title</th>
+                        <th>ID</th>
+                        <th>Status</th>
+                        <th>Votes Cast</th> <th>Start Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for election in elections %}
+                    <tr {% if election.status == 'Active' %}style="background: #e6f7ff; font-weight: 600;"{% endif %}>
+                        <td>{{ election.title }}</td>
+                        <td>{{ election.id }}</td>
+                        <td>
+                            <span class="status-badge 
+                                {% if election.status == 'Active' %}status-active
+                                {% elif election.published_results %}status-published
+                                {% else %}status-ended{% endif %}">
+                                {% if election.status == 'Active' %}LIVE{% elif election.published_results %}PUBLISHED{% else %}ENDED{% endif %}
+                            </span>
+                        </td>
+                        <td>{{ election.total_votes }}</td> <td>{{ election.startDate.split('T')[0] }}</td>
+                        <td>
+                            <a href="/admin/results?election_id={{ election.id }}" class="btn btn-primary btn-sm">
+                                {% if election.status == 'Active' %}
+                                    View Live Results
+                                {% else %}
+                                    View Results
+                                {% endif %}
+                            </a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6">No elections found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        {% if active_election %}
+        <h3 style="margin-top: 3rem; color: #2c3e50;">Active Election Overview</h3>
+        <div class="election-card">
+            <div class="election-header">
+                <h3 class="election-title">{{ active_election.title }}</h3>
+                <span class="election-status election-active">{{ active_election.status }}</span>
+            </div>
+            <div class="election-details">
+                <div>
+                    <div class="election-detail-value">{{ active_election_votes }}</div>
+                    <div class="election-detail-label">Total Votes Cast (Active Election)</div>
+                </div>
+                <div>
+                    <div class="election-detail-value">{{ total_voters }}</div>
+                    <div class="election-detail-label">Eligible Voters</div>
+                </div>
+                <div>
+                    <div class="election-detail-value">{{ active_election.endDate.split('T')[0] }}</div>
+                    <div class="election-detail-label">Closing Date</div>
+                </div>
+            </div>
+            <div class="election-actions">
+                <a href="/admin/results?election_id={{ active_election.id }}" class="btn btn-primary">View Live Results</a> 
+                <form method="POST" action="/admin/end-election/{{ active_election.id }}" style="display:inline;">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to END the {{ active_election.title }} election? This cannot be undone.')">
+                        End Election
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+    <script>
+      function showTab(tabName) {
+        document
+          .querySelectorAll(".tab-content")
+          .forEach((content) => content.classList.remove("active"));
+        document
+          .querySelectorAll(".nav-tab")
+          .forEach((tab) => tab.classList.remove("active"));
+        document.getElementById(tabName).classList.add("active");
+        event.currentTarget.classList.add("active");
+      }
+
+      document
+        .getElementById("voterSearch")
+        .addEventListener("keyup", function () {
+          const filter = this.value.toUpperCase();
+          const table = document.getElementById("voterTable");
+          const rows = table.getElementsByTagName("tr");
+
+          for (let i = 1; i < rows.length; i++) {
+            // Start from 1 to skip header
+            const cells = rows[i].getElementsByTagName("td");
+            let found = false;
+            if (cells.length > 0) {
+              // Check voter ID (cell 0) and Name (cell 1)
+              if (
+                cells[0].textContent.toUpperCase().indexOf(filter) > -1 ||
+                cells[1].textContent.toUpperCase().indexOf(filter) > -1
+              ) {
+                found = true;
+              }
+            }
+            rows[i].style.display = found ? "" : "none";
+          }
+        });
+        
+        // 1. Initial Data passed from Flask/Jinja
+        const TURNOUT_DATA_INIT = {{ turnout_data | tojson | safe }};
+        const BAR_CHART_DATA_INIT = {{ bar_chart_data | tojson | safe }};
+        let pieChartInstance = null;
+        let barChartInstance = null;
+      
+        function renderPieChart(data) {
+            const pieCtx = document.getElementById('pieChart');
+            
+            if (pieChartInstance) {
+                pieChartInstance.destroy();
+            }
+
+            if (!data.data || data.data.length === 0 || data.data.every(val => val === 0)) {
+                 // Clear canvas if no data
+                 pieCtx.getContext('2d').clearRect(0, 0, pieCtx.width, pieCtx.height);
+                 return; 
+            }
+            
+            pieChartInstance = new Chart(pieCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: 'Voter Status',
+                        data: data.data,
+                        backgroundColor: ['#27ae60', '#bdc3c7'],
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        title: { display: false }
+                    }
+                }
+            });
+        }
+        
+        function renderBarChart(data) {
+            const barCtx = document.getElementById('barChart');
+            
+            if (barChartInstance) {
+                barChartInstance.destroy();
+            }
+            
+            const raceLabel = data.datasets.length > 0 ? data.datasets[0].label : 'No Votes Recorded';
+            document.getElementById('barChartTitle').textContent = `Vote Distribution: ${raceLabel}`;
+
+            if (data.labels.length === 0) {
+                // Clear canvas if no data
+                barCtx.getContext('2d').clearRect(0, 0, barCtx.width, barCtx.height);
+                return;
+            }
+
+            barChartInstance = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: data.labels,
+                    datasets: data.datasets.map(dataset => ({
+                        ...dataset,
+                        backgroundColor: ['#3498db', '#27ae60', '#f1c40f', '#e74c3c'].slice(0, dataset.data.length),
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        borderWidth: 1
+                    }))
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: { display: true, text: 'Vote Count' }
+                        }
+                    }
+                }
+            });
+        }
+        
+        async function fetchChartData(electionId) {
+            if (electionId === 'N/A' || !electionId) return;
+            
+            // Show loading state 
+            document.getElementById('barChartTitle').textContent = 'Loading...';
+
+            try {
+                // NEW ROUTE NEEDED: This is an assumed route to fetch data dynamically
+                const response = await fetch(`/api/admin/get-chart-data/${electionId}`); 
+                
+                if (!response.ok) {
+                    throw new Error('Network response was not ok.');
+                }
+                
+                const data = await response.json();
+                
+                // The API returns {'turnout_data', 'bar_chart_data'}
+                renderPieChart(data.turnout_data);
+                renderBarChart(data.bar_chart_data);
+                
+            } catch (error) {
+                console.error('Error fetching chart data:', error);
+                document.getElementById('barChartTitle').textContent = 'Error Loading Data';
+            }
+        }
+
+        // Initialize charts on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            renderPieChart(TURNOUT_DATA_INIT);
+            renderBarChart(BAR_CHART_DATA_INIT);
+            
+            // Auto-select initial election data if available
+            const selector = document.getElementById('electionSelector');
+            const initialId = selector.value;
+            
+            if (initialId && initialId !== 'N/A') {
+                const initialTitle = selector.options[selector.selectedIndex].text.split('(')[0].trim();
+                document.getElementById('barChartTitle').textContent = `Vote Distribution: ${initialTitle}`;
+            }
+        });
+        async function decryptVoterEmail(voterId) {
+            const emailSpan = document.getElementById(`email-${voterId}`);
+            const originalText = emailSpan.textContent;
+            emailSpan.textContent = 'Decrypting...'; // Show loading state
+
+            try {
+                const response = await fetch(`/api/admin/decrypt-email/${voterId}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    emailSpan.textContent = data.email; // Display decrypted email
+                    // Temporarily reset after 15 seconds for security
+                    setTimeout(() => {
+                        emailSpan.textContent = originalText;
+                    }, 15000); 
+                } else {
+                    emailSpan.textContent = originalText;
+                    alert('Decryption failed: ' + (data.error || 'Check server logs.'));
+                }
+
+            } catch (error) {
+                console.error('Decryption error:', error);
+                emailSpan.textContent = originalText;
+                alert('An error occurred during decryption.');
+            }
+        }
+        
+// Initialize charts on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // ... (existing code for chart initialization) ...
+            renderPieChart(TURNOUT_DATA_INIT);
+            renderBarChart(BAR_CHART_DATA_INIT);
+            
+            // Auto-select initial election data if available
+            const selector = document.getElementById('electionSelector');
+            const initialId = selector.value;
+            
+            if (initialId && initialId !== 'N/A') {
+                // Fetch data for the initial election upon load to ensure charts populate
+                fetchChartData(initialId);
+                const initialTitle = selector.options[selector.selectedIndex].text.split('(')[0].trim();
+                document.getElementById('barChartTitle').textContent = `Vote Distribution: ${initialTitle}`;
+            }
+            
+            // Ensure the correct tab is shown on load (Overview is default)
+            showTab('overview'); 
+        });
+    </script>
+  </body>
+</html>

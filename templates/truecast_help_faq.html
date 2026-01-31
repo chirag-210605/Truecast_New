@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRUECAST - Help & FAQ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: #3498db;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .faq-section {
+            margin-bottom: 3rem;
+        }
+
+        .faq-section h2 {
+            font-size: 1.8rem;
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #e9ecef;
+            padding: 1rem 0;
+        }
+
+        .faq-question {
+            font-weight: 600;
+            color: #34495e;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .faq-question:hover {
+            color: #3498db;
+        }
+
+        .faq-answer {
+            color: #7f8c8d;
+            margin-top: 1rem;
+            padding-left: 20px;
+            display: none;
+            line-height: 1.6;
+        }
+
+        .faq-answer.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .contact-section {
+            text-align: center;
+            padding: 2rem;
+            border: 2px dashed #bdc3c7;
+            border-radius: 15px;
+            background: #f8f9fa;
+        }
+
+        .contact-section h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .contact-section p {
+            color: #7f8c8d;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1.5rem;
+            }
+            .faq-section h2 {
+                font-size: 1.5rem;
+            }
+            .faq-question {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>❓ Help Center</h1>
+            <p>Find answers to common questions about TRUECAST</p>
+        </div>
+
+        <div class="main-content">
+            <input type="text" id="searchInput" class="search-bar" placeholder="Search for a question...">
+
+            <!-- General Questions -->
+            <div class="faq-section" id="general-questions">
+                <h2>General Questions</h2>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span>What is TRUECAST?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        TRUECAST is a secure, blockchain-based digital voting system designed to make elections more transparent and accessible. It uses multi-factor authentication and cryptographic verification to ensure the integrity of every vote.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span>Is my vote anonymous?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes. While every vote is recorded on the blockchain for transparency, your personal identity is securely encrypted and not linked to your vote. This ensures your privacy and anonymity.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span>What are the system requirements to use TRUECAST?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        TRUECAST is designed to be accessible on most modern devices. You will need a stable internet connection and a device with a modern web browser (e.g., Chrome, Firefox, Safari). Biometric features (face/fingerprint) require a compatible device.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Registration & Login -->
+            <div class="faq-section" id="registration-login">
+                <h2>Registration & Login</h2>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span>How do I register to vote?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        You can register by visiting the <a href="/voter-register">Voter Registration page</a>. The process involves four steps: providing personal information, verifying your identity with official documents, setting up biometric authentication, and accepting the terms of service.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span>I forgot my login credentials. What should I do?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Your login is based on your unique Voter ID and your chosen authentication method (biometric, OTP, or backup PIN). If you have trouble, you can use the SMS/Email OTP method to regain access.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span>My biometric scan isn't working.</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        Ensure you are in a well-lit area for facial recognition. For fingerprint scans, make sure your finger and the sensor are clean. If the issue persists, you can always use your backup PIN or OTP to log in.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Voting Process -->
+            <div class="faq-section" id="voting-process">
+                <h2>Voting Process</h2>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span>How do I cast my vote?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        After logging in, you will be taken to the voting dashboard. Simply click on your preferred candidate or option for each race. Once all selections are made, click the "Cast Vote" button to submit your ballot.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span>Can I change my vote after it's cast?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        No. Due to the immutable nature of blockchain technology, once a vote is cast and recorded, it cannot be changed or deleted. Please review your selections carefully before submitting your ballot.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleAnswer(this)">
+                        <span>How can I be sure my vote was counted?</span>
+                        <span>+</span>
+                    </div>
+                    <div class="faq-answer">
+                        After casting your vote, you will receive a unique **transaction hash**. You can use this hash on the <a href="/vote-verification">Vote Verification page</a> to confirm that your vote was successfully recorded on the blockchain.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contact Support -->
+            <div class="contact-section" id="contact">
+                <h2>Still Need Help?</h2>
+                <p>Our support team is available 24/7 to assist you.</p>
+                <a href="mailto:support@truecast.com" class="btn btn-primary">Contact Support</a>
+            </div>
+        </div>
+
+        <div class="nav-links">
+            <a href="/">Back to Home</a>
+        </div>
+    </div>
+
+    <script>
+        function toggleAnswer(element) {
+            const answer = element.nextElementSibling;
+            const plusSign = element.querySelector('span:last-child');
+            
+            if (answer.classList.contains('active')) {
+                answer.classList.remove('active');
+                plusSign.textContent = '+';
+            } else {
+                answer.classList.add('active');
+                plusSign.textContent = '-';
+            }
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('keyup', function(e) {
+            const query = e.target.value.toLowerCase();
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question').textContent.toLowerCase();
+                const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                
+                if (question.includes(query) || answer.includes(query)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

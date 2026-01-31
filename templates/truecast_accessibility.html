@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRUECAST - Accessibility</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 15px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            line-height: 1.6;
+            color: #34495e;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section h2 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #e9ecef;
+            padding-bottom: 0.5rem;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #3498db;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+            color: #34495e;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-card p {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        .contact-section {
+            text-align: center;
+            padding: 2rem;
+            border: 2px dashed #bdc3c7;
+            border-radius: 15px;
+            background: #f8f9fa;
+        }
+
+        .contact-section h2 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .contact-section p {
+            color: #7f8c8d;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 2rem;
+            }
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            .section h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>♿ Accessibility Statement</h1>
+            <p>Ensuring an inclusive voting experience for all citizens</p>
+        </div>
+
+        <div class="main-content">
+            <div class="section">
+                <h2>Our Commitment</h2>
+                <p>
+                    TRUECAST is committed to making the digital voting process accessible to everyone, regardless of ability, location, or device. We have designed our platform to meet and exceed global accessibility standards, including WCAG 2.1 AA, to ensure that every eligible voter can participate fully and independently.
+                </p>
+            </div>
+
+            <div class="section">
+                <h2>Key Accessibility Features</h2>
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">🔊</div>
+                        <h3>Screen Reader Compatibility</h3>
+                        <p>
+                            All content and interactive elements are designed with semantic HTML and appropriate ARIA labels to provide a seamless experience for screen reader users.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⌨️</div>
+                        <h3>Keyboard Navigation</h3>
+                        <p>
+                            The entire platform can be operated using only a keyboard, with clear focus indicators to help users navigate through forms, buttons, and links.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon"> контраст</div>
+                        <h3>High-Contrast Mode</h3>
+                        <p>
+                            For voters with visual impairments, our high-contrast mode adjusts colors to enhance readability and reduce eye strain.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🔍</div>
+                        <h3>Adjustable Text Size</h3>
+                        <p>
+                            Users can easily adjust the text size within their browser settings without affecting the page layout or functionality.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🌐</div>
+                        <h3>Multilingual Support</h3>
+                        <p>
+                            TRUECAST is available in multiple languages to ensure voters can understand and participate in their preferred language.
+                        </p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📝</div>
+                        <h3>Clear & Simple Language</h3>
+                        <p>
+                            We use simple, clear, and direct language throughout the application to make the voting process easy to understand for everyone.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contact-section">
+                <h2>Have an Accessibility-Related Question?</h2>
+                <p>
+                    If you encounter any accessibility issues or have suggestions on how we can improve, please contact our support team.
+                </p>
+                <a href="mailto:accessibility@truecast.com" class="btn btn-primary">Contact Accessibility Support</a>
+            </div>
+        </div>
+
+        <div class="nav-links">
+            <a href="/">Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

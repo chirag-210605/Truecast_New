@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TRUECAST - Admin Live Results</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f5f7fa;
+        min-height: 100vh;
+      }
+      .header {
+        background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        color: white;
+        padding: 1rem 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .header-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 20px;
+      }
+      .results-card {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 2rem;
+      }
+      h2 {
+        color: #2c3e50;
+        margin-bottom: 1rem;
+        font-size: 1.8rem;
+      }
+      .race-section {
+        border-top: 1px solid #e9ecef;
+        padding: 1.5rem 0;
+      }
+      .race-title {
+        color: #3498db;
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+        text-transform: capitalize;
+      }
+      /* Hiding old candidate rows as they are replaced by Chart.js */
+      .candidate-row {
+        display: none; 
+      }
+      
+      /* --- NEW: Metrics Grid CSS --- */
+      .metrics-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.5rem;
+        margin-top: 1rem;
+        padding: 1rem;
+        background: #f0f3f5;
+        border-radius: 8px;
+      }
+      .metric-box {
+        text-align: center;
+        padding: 0.5rem;
+      }
+      .metric-value {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #2c3e50;
+        margin-bottom: 0.2rem;
+      }
+      .metric-label {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+      }
+      /* --- End Metrics Grid CSS --- */
+
+      /* Margin Analysis Insight */
+      .margin-analysis {
+        background: #f0f3f5;
+        padding: 0.75rem 1rem;
+        border-radius: 8px;
+        margin-top: 1rem;
+        font-size: 1rem;
+        color: #555;
+      }
+      .margin-analysis strong {
+        color: #2c3e50;
+      }
+      
+      /* Status Badges and Alerts */
+      .status-badge {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        margin-left: 1rem;
+      }
+      .status-active {
+        background: #d1fae5;
+        color: #059669;
+      }
+      .status-ended {
+        background: #fef2f2;
+        color: #b91c1c;
+      }
+      .status-published {
+        background: #ffe6b6; 
+        color: #ff9800;
+      }
+      .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 1rem;
+      }
+      .btn-publish {
+        background: #27ae60;
+        color: white;
+      }
+      .alert-box {
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        font-weight: 500;
+      }
+      .alert-live {
+        background: #fff3e0;
+        border: 1px solid #ff9800;
+        color: #ff9800;
+      }
+      .alert-ended {
+        background: #e3f2fd;
+        border: 1px solid #3498db;
+        color: #3498db;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="header-content">
+        <div class="logo">🗳️ TRUECAST Admin Results</div>
+        <a href="/admin-dashboard" class="btn" style="background: white; color: #3498db;">← Back to Dashboard</a>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="results-card">
+        <h2>
+          {{ election_title }}
+          <span class="status-badge {% if is_published %}status-published{% elif is_active %}status-active{% else %}status-ended{% endif %}">
+            {% if is_published %}PUBLISHED{% elif is_active %}LIVE{% else %}ENDED{% endif %}
+          </span>
+        </h2>
+        
+        {% if is_active %}
+          <div class="alert-box alert-live">
+            This is the **LIVE** vote count. Results are preliminary and not yet certified.
+          </div>
+        {% elif not is_published %}
+          <div class="alert-box alert-ended">
+            Election is **ENDED**. These are the final, uncertified results. Please review and certify before publishing.
+          </div>
+        {% else %}
+          <div class="alert-box alert-ended" style="background: #e6ffed; border-color: #27ae60; color: #27ae60;">
+            Results have been **PUBLISHED** to the public voter page.
+          </div>
+        {% endif %}
+        
+        <p style="color: #7f8c8d; margin-bottom: 0.5rem;">
+          Tally of **{{ total_votes_in_election }}** total votes recorded for this election.
+        </p>
+        
+        <div class="metrics-grid">
+          <div class="metric-box">
+            <div class="metric-value">{{ turnout_rate | default('N/A') }}%</div>
+            <div class="metric-label">Voter Turnout (of Eligible Voters)</div>
+          </div>
+
+          <div class="metric-box">
+            <div class="metric-value">{{ overall_margin_percentage | default('N/A') }}%</div>
+            <div class="metric-label">Tightest Margin of Victory</div>
+          </div>
+          
+          <div class="metric-box">
+            <div class="metric-value">{{ total_eligible_voters | default('N/A') }}</div>
+            <div class="metric-label">Total Eligible Voters</div>
+          </div>
+        </div>
+        <!-- {% if results %}
+          <div style="margin-bottom: 3rem; margin-top: 2rem;">
+            <h3 style="color: #2c3e50; margin-bottom: 1rem;">Election Vote Distribution (Primary Race)</h3>
+            <div style="width: 100%; height: 350px;">
+              <canvas id="raceBarChart"></canvas>
+            </div>
+          </div> -->
+
+          {% for race_slug, candidates in results.items() %}
+            <div class="race-section">
+              <h3 class="race-title">
+                {{ race_slug | replace('-', ' ') }} 
+                <select onchange="loadRegionalResults('{{ election_id }}', '{{ race_slug }}', this.value)" style="margin-left: 1rem;">
+                    <option value="All">All Regions (Default)</option>
+                    {% for region in available_regions | default([]) %}
+                        <option value="{{ region }}">{{ region }}</option>
+                    {% endfor %}
+                </select>
+              </h3>
+              
+              <div style="margin-bottom: 1.5rem; margin-top: 1rem;">
+                <div style="width: 100%; height: 350px;">
+                  <canvas id="chart-{{ race_slug }}"></canvas>
+                </div>
+              </div>
+
+              {% set total_votes_in_race = candidates.values() | sum %}
+              {% set sorted_candidates = candidates.items() | sort(attribute=1, reverse=true) %}
+              
+              {% set winner_count = sorted_candidates[0][1] if sorted_candidates | length > 0 else 0 %}
+              {% set runner_up_count = sorted_candidates[1][1] if sorted_candidates | length > 1 else 0 %}
+              {% set margin = winner_count - runner_up_count %}
+              {% set margin_percentage = (margin / total_votes_in_race * 100) | round(2) if total_votes_in_race > 0 else 0 %}
+              
+              {% for candidate_slug, count in sorted_candidates %}
+                <div class="candidate-row">
+                  <span class="candidate-name">{{ candidate_slug | replace('-', ' ') }}</span>
+                  <span class="vote-count">{{ count }}</span>
+                </div>
+              {% endfor %}
+              
+              {% if total_votes_in_race > 0 and sorted_candidates | length > 1 %}
+                <div class="margin-analysis">
+                    {% set winner_name = sorted_candidates[0][0] | replace('-', ' ') %}
+                    {% set runner_up_name = sorted_candidates[1][1] | replace('-', ' ') %}
+                    <strong>WINNER: {{ winner_name | capitalize }}</strong> led by a margin of **{{ margin }}** votes (**{{ margin_percentage }}%**) over {{ runner_up_name | capitalize }}.
+                </div>
+              {% endif %}
+              
+            </div>
+          {% endfor %}
+        {% else %}
+          <div style="text-align: center; padding: 3rem; background: #f8f8f8; border-radius: 10px;">
+            <p style="color: #e74c3c; font-size: 1.2rem;">No votes have been cast yet for this election.</p>
+          </div>
+        {% endif %}
+        
+        {% if not is_active and not is_published and election_id != 'N/A' %}
+          <form method="POST" action="/admin/audit-and-publish/{{ election_id }}" style="display:inline;">
+            <button type="submit" class="btn btn-publish" onclick="return confirm('WARNING: This will perform a final Chain Audit. If the audit passes, the results will be PUBLISHED to the public voter page. Proceed?')">
+              Audit & Publish Results 🔒
+            </button>
+          </form>
+        {% endif %}
+      </div>
+    </div>
+
+    <script>
+      // Utility function to get safe data from Jinja context
+      const RESULTS_DATA = {{ results | tojson | safe }};
+      const ACTIVE_ELECTION_ID = '{{ election_id }}';
+
+      // A more generic function to render a chart for a specific race
+      function renderChart(raceSlug, raceData) {
+        const chartData = {
+          labels: [],
+          datasets: []
+        };
+        
+        if (!raceData) return;
+        
+        // Convert slugs to display names and get counts
+        const candidateLabels = Object.keys(raceData).map(slug => slug.replace(/-/g, ' ').toUpperCase());
+        const voteCounts = Object.values(raceData);
+        
+        chartData.labels = candidateLabels;
+        chartData.datasets.push({
+          label: raceSlug.replace(/-/g, ' ').toUpperCase(),
+          data: voteCounts,
+          backgroundColor: ['#3498db', '#27ae60', '#f1c40f', '#e74c3c', '#9b59b6', '#1abc9c'], 
+          borderColor: '#f5f7fa',
+          borderWidth: 2
+        });
+
+        const ctx = document.getElementById(`chart-${raceSlug}`).getContext('2d');
+        
+        // Check if a chart already exists for this context and destroy it
+        if (window.chartInstances && window.chartInstances[raceSlug]) {
+          window.chartInstances[raceSlug].destroy();
+        }
+        
+        const newChart = new Chart(ctx, {
+          type: 'bar', 
+          data: chartData,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              title: {
+                display: true,
+                text: `Results for: ${raceSlug.replace(/-/g, ' ').toUpperCase()}`
+              }
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                title: { display: true, text: 'Vote Count' }
+              },
+              x: {
+                 ticks: { autoSkip: false, maxRotation: 45, minRotation: 45 }
+              }
+            }
+          }
+        });
+
+        // Store chart instance for potential future destruction/updates
+        window.chartInstances = window.chartInstances || {};
+        window.chartInstances[raceSlug] = newChart;
+      }
+
+      function loadRegionalResults(electionId, raceSlug, region) {
+        // Conceptual: This function would use an AJAX call to a new Flask route 
+        // /api/admin/regional-results?election_id=X&race_slug=Y&region=Z
+        // to fetch data filtered by the selected region and then update the Chart.js
+        console.log(`Fetching results for: Election ${electionId}, Race ${raceSlug}, Region ${region}`);
+        alert("Regional data fetching is a planned feature.");
+      }
+
+      document.addEventListener('DOMContentLoaded', function() {
+        if (Object.keys(RESULTS_DATA).length > 0) {
+          // Loop through all races and render a chart for each
+          for (const raceSlug in RESULTS_DATA) {
+            renderChart(raceSlug, RESULTS_DATA[raceSlug]);
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

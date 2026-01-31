@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRUECAST - Security & Trust</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 15px;
+            padding: 3rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            line-height: 1.6;
+            color: #34495e;
+        }
+
+        .section {
+            margin-bottom: 2.5rem;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 5px solid #3498db;
+        }
+
+        .section h2 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section p {
+            margin-bottom: 1rem;
+        }
+
+        .section ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .section li {
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .feature-icon {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            color: #27ae60;
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                padding: 1.5rem;
+            }
+
+            .section h2 {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛡️ Security & Trust</h1>
+            <p>Our commitment to protecting your vote and your privacy</p>
+        </div>
+
+        <div class="main-content">
+            <div class="section">
+                <h2><span class="feature-icon">⛓️</span>Blockchain Security</h2>
+                <p>
+                    TRUECAST is built on a private blockchain to ensure every vote is recorded in an immutable, tamper-proof ledger. Once a vote is cast, it cannot be altered or deleted, guaranteeing the integrity of the election results.
+                </p>
+                <ul>
+                    <li>
+                        <span class="feature-icon">✅</span>
+                        <strong>Immutable Ledger:</strong> All vote data is permanently recorded on the blockchain, creating a verifiable and unchangeable history.
+                    </li>
+                    <li>
+                        <span class="feature-icon">✅</span>
+                        <strong>Decentralized Storage:</strong> The ledger is distributed across multiple nodes, eliminating single points of failure and preventing malicious attacks.
+                    </li>
+                    <li>
+                        <span class="feature-icon">✅</span>
+                        <strong>Cryptographic Verification:</strong> Each vote is secured with a unique cryptographic hash, allowing you to publicly verify your vote without revealing your identity.
+                    </li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2><span class="feature-icon">🔐</span>Advanced Authentication</h2>
+                <p>
+                    We employ a multi-layered authentication system to verify every voter's identity and prevent unauthorized access.
+                </p>
+                <ul>
+                    <li>
+                        <span class="feature-icon">✅</span>
+                        <strong>Multi-Factor Authentication (MFA):</strong> Voters must use a combination of methods, including biometrics, OTPs, and a backup PIN, to log in.
+                    </li>
+                    <li>
+                        <span class="feature-icon">✅</span>
+                        <strong>Biometric Security:</strong> Your facial or fingerprint data is converted into a secure mathematical template that cannot be reverse-engineered, ensuring your biometric information remains private.
+                    </li>
+                    <li>
+                        <span class="feature-icon">✅</span>
+                        <strong>End-to-End Encryption:</strong> All data exchanged between your device and our servers is encrypted, protecting it from interception.
+                    </li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2><span class="feature-icon">📍</span>Geo-Location Verification</h2>
+                <p>
+                    For specific elections, we use geo-location technology to ensure that votes are only cast by individuals physically present within a designated voting region.
+                </p>
+                <ul>
+                    <li>
+                        <span class="feature-icon">✅</span>
+                        <strong>Region-Based Authorization:</strong> Your location is verified in real-time to confirm your eligibility to vote in a specific election.
+                    </li>
+                    <li>
+                        <span class="feature-icon">✅</span>
+                        <strong>Data Minimization:</strong> Your geo-location data is used only for verification at the time of voting and is not stored.
+                    </li>
+                </ul>
+            </div>
+
+            <div class="section">
+                <h2><span class="feature-icon">📊</span>Transparency & Auditability</h2>
+                <p>
+                    TRUECAST is committed to transparency. While your vote remains anonymous, the entire voting process is auditable to ensure fairness and accuracy.
+                </p>
+                <ul>
+                    <li>
+                        <span class="feature-icon">✅</span>
+                        <strong>Public Audits:</strong> The cryptographic hashes of all votes are publicly verifiable, allowing anyone to confirm that their vote was recorded accurately.
+                    </li>
+                    <li>
+                        <span class="feature-icon">✅</span>
+                        <strong>Real-Time Monitoring:</strong> Administrators can monitor election progress in real-time, with all actions and data changes logged on the blockchain.
+                    </li>
+                    <li>
+                        <span class="feature-icon">✅</span>
+                        <strong>Anonymous Voting:</strong> Your vote is cryptographically linked to your identity for verification but is never publicly associated with your personal data.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="nav-links">
+            <a href="/">Back to Home</a>
+            <a href="/vote-verification">Verify My Vote</a>
+        </div>
+    </div>
+</body>
+</html>

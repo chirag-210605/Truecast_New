@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OCR Tool - TrueCast</title>
+    <style>
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+        .form-group { margin-bottom: 20px; }
+        .result-box { 
+            background: #f8f9fa; 
+            border: 1px solid #dee2e6; 
+            padding: 20px; 
+            border-radius: 5px; 
+            margin-top: 20px;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        .error { color: #dc3545; }
+        .success { color: #28a745; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>OCR Document Processing</h1>
+        
+        {% if not ocr_available %}
+        <div class="alert alert-warning">
+            <strong>OCR Disabled:</strong> Please install required libraries: 
+            <code>pip install pytesseract Pillow pdf2image</code>
+        </div>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="document">Upload Document (PDF or Image):</label>
+                <input type="file" name="document" id="document" accept=".pdf,.jpg,.jpeg,.png,.tiff,.bmp" required>
+            </div>
+            <button type="submit" {% if not ocr_available %}disabled{% endif %}>Process OCR</button>
+        </form>
+
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+
+        {% if extracted_text %}
+        <div class="result-box">
+            <h3>Extracted Text:</h3>
+            <div>{{ extracted_text }}</div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

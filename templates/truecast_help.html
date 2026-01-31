@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRUECAST - Help & FAQ</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-bar {
+            max-width: 500px;
+            margin: 2rem auto 0;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 3rem 1rem 1rem;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .search-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 20px;
+        }
+
+        /* Quick Links */
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .quick-link-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .quick-link-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .quick-link-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .quick-link-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .quick-link-desc {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            height: fit-content;
+            position: sticky;
+            top: 2rem;
+        }
+
+        .sidebar h3 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-menu li {
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-menu a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: #7f8c8d;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-menu a:hover, .nav-menu a.active {
+            background: #e7f3ff;
+            color: #3498db;
+        }
+
+        /* Content Area */
+        .content-area {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .section h3 {
+            color: #34495e;
+            margin: 2rem 0 1rem 0;
+            font-size: 1.3rem;
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            background: #f8f9fa;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #2c3e50;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: #e9ecef;
+        }
+
+        .faq-question.active {
+            background: #e7f3ff;
+            color: #3498db;
+        }
+
+        .faq-toggle {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+
+        .faq-answer.active {
+            padding: 1.5rem;
+            max-height: 500px;
+        }
+
+        .faq-answer p {
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .faq-answer ul {
+            color: #7f8c8d;
+            padding-left: 1.5rem;
+            line-height: 1.6;
+        }
+
+        /* Step-by-step Guide */
+        .step-guide {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: #3498db;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-content p {
+            color: #7f8c8d;
+            line-height: 1.6;
+        }
+
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .contact-card {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .contact-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-title {
+            font-size: 1.3rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .contact-info {
+            color: #7f8c8d;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-btn {
+            background: #3498db;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .contact-btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        /* Alert Boxes */
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .alert-info {
+            background: #e7f3ff;
+            border: 1px solid #3498db;
+            color: #2980b9;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            color: #856404;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            border: 1px solid #28a745;
+            color: #155724;
+        }
+
+        .alert-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Video Tutorial Placeholder */
+        .video-container {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            margin: 2rem 0;
+            border: 2px dashed #dee2e6;
+        }
+
+        .video-placeholder {
+            font-size: 4rem;
+            color: #6c757d;
+            margin-bottom: 1rem;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                position: static;
+            }
+
+            .quick-links {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .step-item {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        /* Accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        /* Print Styles */
+        @media print {
+            .header, .sidebar, .quick-links {
+                display: none;
+            }
+            
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .content-area {
+                box-shadow: none;
+                border: 1px solid #ccc;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>❓ Help & Support</h1>
+        <p>Find answers to your questions about TRUECAST's secure voting system</p>
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="Search for help topics..." id="helpSearch">
+            <button class="search-btn" onclick="searchHelp()">🔍</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="quick-links">
+            <a href="#" class="quick-link-card" onclick="showSection('getting-started')">
+                <div class="quick-link-icon">🚀</div>
+                <div class="quick-link-title">Getting Started</div>
+                <div class="quick-link-desc">Learn how to register and cast your first vote</div>
+            </a>
+            
+            <a href="#" class="quick-link-card" onclick="showSection('voting-guide')">
+                <div class="quick-link-icon">🗳️</div>
+                <div class="quick-link-title">Voting Guide</div>
+                <div class="quick-link-desc">Step-by-step voting instructions</div>
+            </a>
+            
+            <a href="#" class="quick-link-card" onclick="showSection('security')">
+                <div class="quick-link-icon">🔒</div>
+                <div class="quick-link-title">Security & Privacy</div>
+                <div class="quick-link-desc">Understanding our security measures</div>
+            </a>
+            
+            <a href="#" class="quick-link-card" onclick="showSection('troubleshooting')">
+                <div class="quick-link-icon">🔧</div>
+                <div class="quick-link-title">Troubleshooting</div>
+                <div class="quick-link-desc">Solve common issues quickly</div>
+            </a>
+        </div>
+
+        <div class="main-content">
+            <div class="sidebar">
+                <h3>Help Topics</h3>
+                <ul class="nav-menu">
+                    <li><a href="#" onclick="showSection('getting-started')" class="active">Getting Started</a></li>
+                    <li><a href="#" onclick="showSection('registration')">Voter Registration</a></li>
+                    <li><a href="#" onclick="showSection('voting-guide')">Voting Guide</a></li>
+                    <li><a href="#" onclick="showSection('verification')">Vote Verification</a></li>
+                    <li><a href="#" onclick="showSection('security')">Security & Privacy</a></li>
+                    <li><a href="#" onclick="showSection('accessibility')">Accessibility</a></li>
+                    <li><a href="#" onclick="showSection('troubleshooting')">Troubleshooting</a></li>
+                    <li><a href="#" onclick="showSection('contact')">Contact Support</a></li>
+                </ul>
+            </div>
+
+            <div class="content-area">
+                <!-- Getting Started Section -->
+                <div class="section active" id="getting-started">
+                    <h2>Getting Started with TRUECAST</h2>
+                    
+                    <div class="alert alert-info">
+                        <span class="alert-icon">ℹ️</span>
+                        <div>
+                            Welcome to TRUECAST! This secure blockchain-based voting system ensures your vote is private, verifiable, and tamper-proof.
+                        </div>
+                    </div>
+
+                    <h3>Quick Start Guide</h3>
+                    <div class="step-guide">
+                        <div class="step-item">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Create Your Account</h4>
+                                <p>Register as a voter by providing your personal information and completing identity verification.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Set Up Security</h4>
+                                <p>Configure biometric authentication (face/fingerprint) and create a backup PIN for secure access.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Verify Your Identity</h4>
+                                <p>Complete the multi-factor authentication process to ensure only you can access your voting account.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>Cast Your Vote</h4>
+                                <p>Select your candidates, review your choices, and submit your encrypted vote to the blockchain.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <h4>Verify Your Vote</h4>
+                                <p>Use your transaction hash to verify that your vote was recorded correctly on the blockchain.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="video-container">
+                        <div class="video-placeholder">🎥</div>
+                        <h4>Watch: TRUECAST Overview (3:45)</h4>
+                        <p style="color: #7f8c8d;">Learn the basics of our secure voting system</p>
+                    </div>
+                </div>
+
+                <!-- Voter Registration Section -->
+                <div class="section" id="registration">
+                    <h2>Voter Registration</h2>
+                    
+                    <div class="alert alert-warning">
+                        <span class="alert-icon">⚠️</span>
+                        <div>
+                            You must be a registered voter in your jurisdiction to use TRUECAST. The registration process includes identity verification and security setup.
+                        </div>
+                    </div>
+
+                    <h3>Registration Requirements</h3>
+                    <p>To register for TRUECAST voting, you'll need:</p>
+                    <ul style="margin: 1rem 0; padding-left: 2rem; line-height: 1.8;">
+                        <li>Valid government-issued photo ID</li>
+                        <li>Proof of residence (utility bill, lease agreement, etc.)</li>
+                        <li>Email address and phone number</li>
+                        <li>Device with camera for biometric setup</li>
+                    </ul>
+
+                    <h3>Frequently Asked Questions</h3>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            How long does registration take?
+                            <span class="faq-toggle">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Registration typically takes 10-15 minutes to complete. Identity verification may take up to 24 hours to process.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            What if I don't have a smartphone?
+                            <span class="faq-toggle">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>You can use any device with a camera (computer, tablet) for biometric setup. Alternative authentication methods like PIN are available for voting.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            Can I register on election day?
+                            <span class="faq-toggle">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>Registration must be completed at least 48 hours before election day to allow for identity verification and security checks.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Voting Guide Section -->
+                <div class="section" id="voting-guide">
+                    <h2>Voting Guide</h2>
+                    
+                    <div class="alert alert-success">
+                        <span class="alert-icon">✅</span>
+                        <div>
+                            Follow these steps to cast your vote securely. Your vote is encrypted and recorded on an immutable blockchain.
+                        </div>
+                    </div>
+
+                    <h3>Before You Vote</h3>
+                    <ul style="margin: 1rem 0; padding-left: 2rem; line-height: 1.8;">
+                        <li>Ensure you're in an authorized voting location</li>
+                        <li>Have your voter ID and authentication method ready</li>
+                        <li>Review candidate information and ballot measures</li>
+                        <li>Ensure stable internet connection</li>
+                    </ul>
+
+                    <h3>Voting Process</h3>
+                    <div class="step-guide">
+                        <div class="step-item">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Login Authentication</h4>
+                                <p>Enter your voter ID and complete multi-factor authentication using your preferred method (biometric, OTP, or PIN).</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Location Verification</h4>
+                                <p>System will verify you're in an authorized voting location using GPS and network verification.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Make Your Selections</h4>
+                                <p>Review all races and ballot measures. Select your preferred candidates and vote on propositions.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">4</div>
+                            <div class="step-content">
+                                <h4>Review Your Choices</h4>
+                                <p>Carefully review all your selections. Once submitted, votes cannot be changed.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">5</div>
+                            <div class="step-content">
+                                <h4>Submit Your Vote</h4>
+                                <p>Confirm your final selections and submit. Your vote will be encrypted and recorded on the blockchain.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">6</div>
+                            <div class="step-content">
+                                <h4>Get Your Receipt</h4>
+                                <p>Save your transaction hash receipt to verify your vote later. This confirms your vote was recorded.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Vote Verification Section -->
+                <div class="section" id="verification">
+                    <h2>Vote Verification</h2>
+                    
+                    <div class="alert alert-info">
+                        <span class="alert-icon">🔍</span>
+                        <div>
+                            TRUECAST provides transparent vote verification. You can confirm your vote was recorded correctly without compromising ballot secrecy.
+                        </div>
+                    </div>
+
+                    <h3>How to Verify Your Vote</h3>
+                    <p>After casting your vote, you'll receive a unique transaction hash. Use this hash to:</p>
+                    <ul style="margin: 1rem 0; padding-left: 2rem; line-height: 1.8;">
+                        <li>Confirm your vote was recorded on the blockchain</li>
+                        <li>Verify the timestamp and block information</li>
+                        <li>Check that your vote hasn't been tampered with</li>
+                        <li>Download an official verification receipt</li>
+                    </ul>
+
+                    <h3>Understanding Verification Results</h3>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            What does "blockchain confirmed" mean?
+                            <span class="faq-toggle">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>This means your vote has been permanently recorded on the blockchain and has received the required number of confirmations from network validators.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            Can I see who I voted for in verification?
+                            <span class="faq-toggle">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>No, the verification system only confirms that your vote was recorded. The actual vote choices remain encrypted and anonymous to protect ballot secrecy.</p>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            What if verification fails?
+                            <span class="faq-toggle">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p>If verification fails, contact election officials immediately. You may need to cast a provisional ballot or re-vote if within the allowed timeframe.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security & Privacy Section -->
+                <div class="section" id="security">
+                    <h2>Security & Privacy</h2>
+                    
+                    <div class="alert alert-success">
+                        <span class="alert-icon">🛡️</span>
+                        <div>
+                            TRUECAST uses military-grade encryption, blockchain technology, and multiple layers of security to protect your vote and privacy.
+                        </div>
+                    </div>
+
+                    <h3>Security Features</h3>
+                    <ul style="margin: 1rem 0; padding-left: 2rem; line-height: 1.8;">
+                        <li><strong>End-to-End Encryption:</strong> Your vote is encrypted from the moment you cast it</li>
+                        <li><strong>Blockchain Storage:</strong> Votes are stored on an immutable, distributed ledger</li>
+                        <li><strong>Multi-Factor Authentication:</strong> Biometric, OTP, and PIN verification</li>
+                        <li><strong>Zero-Knowledge Proofs:</strong> Verify votes without revealing vote content</li>
+                        <li><strong>Real-Time Monitoring:</strong> Continuous security monitoring and threat detection</li>
+                        <li><strong>Audit Trails:</strong> Complete transaction history for transparency</li>
+                    </ul>
+
+                    <h3>Privacy Protection</h3>
+                    <p>We protect your privacy through:</p>
+                    <ul style="margin: 1rem 0; padding-left: 2rem; line-height: 1.8;">
+                        <li>Anonymous vote casting (voter identity separate from vote content)</li>
+                        <li>Encrypted data transmission and storage</li>
+                        <li>No tracking of individual vote choices</li>
+                        <li>Minimal data collection (only what's required for voting)</li>
+                        <li>Automatic data deletion after retention period</li>
+                    </ul>
+
+                    <h3>Security Best Practices</h3>
+                    <div class="step-guide">
+                        <div class="step-item">
+                            <div class="step-number">!</div>
+                            <div class="step-content">
+                                <h4>Keep Your Credentials Secure</h4>
+                                <p>Never share your voter ID, PIN, or authentication methods with anyone. Election officials will never ask for this information.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">!</div>
+                            <div class="step-content">
+                                <h4>Vote in Private</h4>
+                                <p>Ensure you're voting in a private location where others cannot see your selections or coerce your vote choices.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">!</div>
+                            <div class="step-content">
+                                <h4>Use Secure Networks</h4>
+                                <p>Vote using secure, trusted internet connections. Avoid public WiFi for voting activities.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Accessibility Section -->
+                <div class="section" id="accessibility">
+                    <h2>Accessibility Features</h2>
+                    
+                    <div class="alert alert-info">
+                        <span class="alert-icon">♿</span>
+                        <div>
+                            TRUECAST is designed to be accessible to all voters, including those with disabilities. We comply with WCAG 2.1 AA standards.
+                        </div>
+                    </div>
+
+                    <h3>Available Accessibility Features</h3>
+                    <ul style="margin: 1rem 0; padding-left: 2rem; line-height: 1.8;">
+                        <li><strong>Screen Reader Support:</strong> Full compatibility with JAWS, NVDA, and VoiceOver</li>
+                        <li><strong>Keyboard Navigation:</strong> Complete keyboard-only operation</li>
+                        <li><strong>High Contrast Mode:</strong> Enhanced visual contrast for better readability</li>
+                        <li><strong>Large Text Options:</strong> Adjustable font sizes up to 200%</li>
+                        <li><strong>Audio Instructions:</strong> Spoken guidance through the voting process</li>
+                        <li><strong>Multiple Languages:</strong> Interface available in major world languages</li>
+                        <li><strong>Alternative Authentication:</strong> Options for those who cannot use biometric authentication</li>
+                    </ul>
+
+                    <h3>How to Enable Accessibility Features</h3>
+                    <div class="step-guide">
+                        <div class="step-item">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>Access Settings</h4>
+                                <p>Look for the accessibility button (♿) in the top-right corner of any page, or press Alt+A.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>Choose Your Options</h4>
+                                <p>Select the accessibility features you need. Settings are saved for future sessions.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="step-item">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>Test Your Setup</h4>
+                                <p>We recommend testing your accessibility setup before election day using our practice voting interface.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <span class="alert-icon">📞</span>
+                        <div>
+                            Need additional accessibility support? Call our dedicated accessibility helpline at 1-800-VOTE-ACCESS for personalized assistance.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Troubleshooting Section -->
+                <div class="section" id="troubleshooting">
+                    <h2>Troubleshooting</h2>
+
+                    <h3>Common Issues and Solutions</h3>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            I can't log in to my account
+                            <span class="faq-toggle">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p><strong>Possible solutions:</strong></p>
+                            <ul>
+                                <li>Check that you're entering the correct Voter ID</li>
+                                <li>Ensure your authentication method (biometric/OTP/PIN) is working</li>
+                                <li>Clear your browser cache and cookies</li>
+                                <li>Try a different browser or device</li>
+                                <li>Contact support if the issue persists</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            Biometric authentication isn't working
+                            <span class="faq-toggle">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p><strong>Try these steps:</strong></p>
+                            <ul>
+                                <li>Ensure your camera/sensor is clean and unobstructed</li>
+                                <li>Verify camera permissions are enabled for TRUECAST</li>
+                                <li>Try in better lighting conditions</li>
+                                <li>Use your backup PIN instead</li>
+                                <li>Re-register your biometric data if needed</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            The website is loading slowly or not at all
+                            <span class="faq-toggle">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p><strong>Network troubleshooting:</strong></p>
+                            <ul>
+                                <li>Check your internet connection</li>
+                                <li>Try refreshing the page or restarting your browser</li>
+                                <li>Disable browser extensions temporarily</li>
+                                <li>Switch to a different network if available</li>
+                                <li>Contact your IT support if on an organizational network</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            I didn't receive my OTP code
+                            <span class="faq-toggle">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p><strong>OTP delivery issues:</strong></p>
+                            <ul>
+                                <li>Check your spam/junk folder for email OTP</li>
+                                <li>Verify your phone number is correct for SMS OTP</li>
+                                <li>Wait up to 5 minutes for delivery</li>
+                                <li>Try requesting a new code</li>
+                                <li>Use alternative authentication method (PIN or biometric)</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFAQ(this)">
+                            My vote verification shows an error
+                            <span class="faq-toggle">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <p><strong>Verification issues:</strong></p>
+                            <ul>
+                                <li>Double-check you entered the transaction hash correctly</li>
+                                <li>Wait a few minutes for blockchain confirmation</li>
+                                <li>Try the verification again later</li>
+                                <li>Contact election officials immediately if error persists</li>
+                                <li>Keep your transaction hash receipt for reference</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-warning">
+                        <span class="alert-icon">🚨</span>
+                        <div>
+                            <strong>Emergency Voting Issues:</strong> If you encounter problems on election day that prevent you from voting, contact the election hotline immediately at <strong>1-800-VOTE-HELP</strong>.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Support Section -->
+                <div class="section" id="contact">
+                    <h2>Contact Support</h2>
+                    
+                    <p>Need additional help? Our support team is here to assist you with any questions or issues.</p>
+
+                    <div class="contact-grid">
+                        <div class="contact-card">
+                            <div class="contact-icon">📞</div>
+                            <div class="contact-title">Phone Support</div>
+                            <div class="contact-info">
+                                General Support: 1-800-VOTE-HELP<br>
+                                Accessibility: 1-800-VOTE-ACCESS<br>
+                                Emergency: 1-800-VOTE-911<br><br>
+                                Available 24/7 during election periods
+                            </div>
+                            <a href="tel:1-800-868-3435" class="contact-btn">Call Now</a>
+                        </div>
+
+                        <div class="contact-card">
+                            <div class="contact-icon">✉️</div>
+                            <div class="contact-title">Email Support</div>
+                            <div class="contact-info">
+                                General: support@truecast.vote<br>
+                                Technical: tech@truecast.vote<br>
+                                Security: security@truecast.vote<br><br>
+                                Response within 2 hours during elections
+                            </div>
+                            <a href="mailto:support@truecast.vote" class="contact-btn">Send Email</a>
+                        </div>
+
+                        <div class="contact-card">
+                            <div class="contact-icon">💬</div>
+                            <div class="contact-title">Live Chat</div>
+                            <div class="contact-info">
+                                Instant support with our technical team<br><br>
+                                Available:<br>
+                                Mon-Fri: 8 AM - 8 PM<br>
+                                Elections: 24/7
+                            </div>
+                            <button class="contact-btn" onclick="openLiveChat()">Start Chat</button>
+                        </div>
+
+                        <div class="contact-card">
+                            <div class="contact-icon">📍</div>
+                            <div class="contact-title">In-Person Help</div>
+                            <div class="contact-info">
+                                Visit your local election office for hands-on assistance<br><br>
+                                Find locations and hours at:<br>
+                                elections.gov/offices
+                            </div>
+                            <a href="https://elections.gov/offices" class="contact-btn" target="_blank">Find Location</a>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <span class="alert-icon">🕐</span>
+                        <div>
+                            <strong>Response Times:</strong> During election periods, we guarantee response within 30 minutes for critical issues. Non-urgent matters are handled within 2 hours.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; padding: 2rem; background: white; margin-top: 2rem;">
+        <p style="color: #7f8c8d; margin-bottom: 1rem;">
+            Still need help? Check out our comprehensive documentation and video tutorials.
+        </p>
+        <div style="display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+            <a href="/documentation" style="color: #3498db; text-decoration: none;">📚 Full Documentation</a>
+            <a href="/tutorials" style="color: #3498db; text-decoration: none;">🎥 Video Tutorials</a>
+            <a href="/voting-dashboard" style="color: #3498db; text-decoration: none;">🗳️ Back to Voting</a>
+            <a href="/" style="color: #3498db; text-decoration: none;">🏠 Home</a>
+        </div>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-menu a').forEach(link => {
+                link.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active class to corresponding nav item
+            document.querySelector(`[onclick="showSection('${sectionId}')"]`).classList.add('active');
+            
+            // Scroll to top of content
+            document.querySelector('.content-area').scrollTop = 0;
+        }
+
+        function toggleFAQ(element) {
+            const answer = element.nextElementSibling;
+            const isActive = element.classList.contains('active');
+            
+            // Close all other FAQ items
+            document.querySelectorAll('.faq-question').forEach(q => {
+                q.classList.remove('active');
+                q.nextElementSibling.classList.remove('active');
+            });
+            
+            // Toggle current FAQ item
+            if (!isActive) {
+                element.classList.add('active');
+                answer.classList.add('active');
+            }
+        }
+
+        function searchHelp() {
+            const query = document.getElementById('helpSearch').value.toLowerCase();
+            const sections = document.querySelectorAll('.section');
+            const searchResults = [];
+            
+            sections.forEach(section => {
+                const content = section.textContent.toLowerCase();
+                if (content.includes(query)) {
+                    searchResults.push({
+                        section: section.id,
+                        title: section.querySelector('h2').textContent
+                    });
+                }
+            });
+            
+            if (searchResults.length > 0) {
+                showSection(searchResults[0].section);
+                // Highlight search terms (simplified)
+                console.log(`Found ${searchResults.length} results for "${query}"`);
+            } else {
+                alert('No results found. Try different keywords or browse the help sections.');
+            }
+        }
+
+        function openLiveChat() {
+            // Simulate live chat opening
+            alert('Live chat would open here. For demo purposes, please use the phone or email support options.');
+        }
+
+        // Search on Enter key
+        document.getElementById('helpSearch').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchHelp();
+            }
+        });
+
+        // Auto-expand FAQ if URL contains hash
+        window.addEventListener('load', function() {
+            const hash = window.location.hash;
+            if (hash && hash.includes('faq-')) {
+                const faqElement = document.getElementById(hash.substring(1));
+                if (faqElement) {
+                    faqElement.click();
+                }
+            }
+        });
+
+        // Keyboard navigation for sections
+        document.addEventListener('keydown', function(e) {
+            if (e.altKey && e.key >= '1' && e.key <= '8') {
+                const sections = ['getting-started', 'registration', 'voting-guide', 'verification', 'security', 'accessibility', 'troubleshooting', 'contact'];
+                const index = parseInt(e.key) - 1;
+                if (sections[index]) {
+                    showSection(sections[index]);
+                }
+            }
+        });
+    </script>
+</body>
+</html>

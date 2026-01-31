@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TRUECAST - Create New Election</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: #f5f7fa;
+        min-height: 100vh;
+      }
+      .header {
+        background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+        color: white;
+        padding: 1rem 0;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      .header-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 20px;
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+      }
+      h2 {
+        color: #2c3e50;
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid #f1f3f4;
+        padding-bottom: 0.5rem;
+      }
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+      label {
+        display: block;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 0.5rem;
+      }
+      input[type="text"],
+      input[type="datetime-local"],
+      textarea,
+      select {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        font-size: 1rem;
+        transition: border-color 0.3s ease;
+      }
+      input[type="text"]:focus,
+      input[type="datetime-local"]:focus,
+      textarea:focus,
+      select:focus {
+        border-color: #3498db;
+        outline: none;
+      }
+      .date-group {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+      }
+      /* Race/Candidate Management */
+      .race-section {
+        border: 2px solid #e9ecef;
+        padding: 1.5rem;
+        border-radius: 10px;
+        margin-top: 1.5rem;
+      }
+      .race-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+      .race-header h3 {
+        color: #3498db;
+        margin: 0;
+      }
+      .candidate-list {
+        margin-top: 1rem;
+        padding: 1rem;
+        border-top: 1px solid #e9ecef;
+      }
+      .candidate-item {
+        /* Adjusted grid for new region field */
+        display: grid; 
+        grid-template-columns: 2fr 2fr 2fr 2fr 80px; 
+        gap: 1rem;
+        margin-bottom: 1rem;
+        align-items: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px dashed #f1f3f4;
+      }
+      .candidate-item:last-child {
+        border-bottom: none;
+      }
+      .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 8px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .btn-primary {
+        background: #3498db;
+        color: white;
+      }
+      .btn-danger {
+        background: #e74c3c;
+        color: white;
+      }
+      .btn-success {
+        background: #27ae60;
+        color: white;
+      }
+      .btn-outline {
+        background: transparent;
+        color: #3498db;
+        border: 1px solid #3498db;
+      }
+      .btn-group {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        justify-content: flex-end;
+      }
+      .add-race-btn {
+        width: 100%;
+        margin-top: 1.5rem;
+      }
+      @media (max-width: 1000px) {
+        .candidate-item {
+          grid-template-columns: 1fr 1fr 1fr;
+        }
+      }
+      @media (max-width: 768px) {
+        .date-group {
+          grid-template-columns: 1fr;
+        }
+        .candidate-item {
+          grid-template-columns: 1fr;
+        }
+        .btn-group {
+          flex-direction: column-reverse;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="header-content">
+        <div class="logo">🗳️ TRUECAST Admin</div>
+        <a href="/admin-dashboard" class="btn btn-outline" style="color: white; border-color: white;">← Back to Dashboard</a>
+      </div>
+    </div>
+
+    <div class="container">
+      <h2>✨ Create New Election</h2>
+
+      <form id="createElectionForm" method="POST" action="/admin/create-election">
+        <div class="form-group">
+          <label for="electionName">Election Title</label>
+          <input
+            type="text"
+            id="electionName"
+            name="electionName"
+            placeholder="e.g., 2026 Mid-Term Elections"
+            required
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="electionDescription">Description</label>
+          <textarea
+            id="electionDescription"
+            name="electionDescription"
+            rows="3"
+            placeholder="Briefly describe the purpose and scope of this election."
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label>Election Timeline (IST)</label> <div class="date-group">
+            <div>
+              <label for="startDate" class="sr-only">Start Date/Time</label>
+              <input
+                type="datetime-local"
+                id="startDate"
+                name="startDate"
+                required
+              />
+              <small style="color: #7f8c8d;">Start Date/Time (IST)</small>
+            </div>
+            <div>
+              <label for="endDate" class="sr-only">End Date/Time</label>
+              <input
+                type="datetime-local"
+                id="endDate"
+                name="endDate"
+                required
+              />
+              <small style="color: #7f8c8d;">End Date/Time (IST)</small>
+            </div>
+          </div>
+        </div>
+
+        <h3>Ballot Races</h3>
+        <div id="racesContainer">
+          </div>
+
+        <button
+          type="button"
+          class="btn btn-outline add-race-btn"
+          onclick="addRace()"
+        >
+          ➕ Add New Race/Proposition
+        </button>
+
+        <div class="btn-group">
+          <a href="/admin-dashboard" class="btn btn-outline">Cancel</a>
+          <button type="submit" class="btn btn-success">
+            Submit & Activate Election
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <script>
+      let raceCount = 0;
+      // Regions passed from the Flask context (from app.py)
+      const defaultRegions = {{ default_regions | tojson | safe }}; 
+
+      function createRegionSelect(name) {
+          let select = `<select name="${name}" required>`;
+          defaultRegions.forEach(region => {
+              select += `<option value="${region}">${region}</option>`;
+          });
+          select += `</select>`;
+          return select;
+      }
+
+      function addRace() {
+        raceCount++;
+        const racesContainer = document.getElementById("racesContainer");
+        const raceIndex = raceCount;
+
+        const raceSection = document.createElement("div");
+        raceSection.className = "race-section";
+        raceSection.setAttribute("data-race-index", raceIndex);
+
+        raceSection.innerHTML = `
+            <div class="race-header">
+                <h3>Race #${raceIndex} Details</h3>
+                <button type="button" class="btn btn-danger btn-sm" onclick="removeRace(${raceIndex})">
+                    ✕ Remove Race
+                </button>
+            </div>
+            <div class="form-group">
+                <label for="raceName_${raceIndex}">Race Title (e.g., Mayor, City Council - Dist 3)</label>
+                <input type="text" id="raceName_${raceIndex}" name="races[${raceIndex}][name]" required placeholder="Race Title">
+            </div>
+            <div class="form-group">
+                <label for="raceType_${raceIndex}">Race Type</label>
+                <select id="raceType_${raceIndex}" name="races[${raceIndex}][type]">
+                    <option value="Candidate">Candidate Election</option>
+                    <option value="Proposition">Proposition/Referendum</option>
+                </select>
+            </div>
+            
+            <h4 style="color: #667eea; margin-top: 1.5rem;">Candidates/Options <small>(All fields required, use "N/A" for Party/Photo if not applicable)</small></h4>
+            <div class="candidate-list" id="candidateList_${raceIndex}">
+                <div class="candidate-item" style="font-weight: 600; color: #7f8c8d; border-bottom: 1px solid #e9ecef;">
+                    <span>Name/Option</span>
+                    <span>Party/Affiliation</span>
+                    <span>Photo URL/Icon</span>
+                    <span>Region</span>
+                    <span></span>
+                </div>
+                </div>
+            <button type="button" class="btn btn-outline" onclick="addCandidate(${raceIndex})">
+                + Add Candidate/Option
+            </button>
+        `;
+        racesContainer.appendChild(raceSection);
+        addCandidate(raceIndex); // Add an initial candidate field
+      }
+
+      function removeRace(index) {
+        const raceElement = document.querySelector(
+          `.race-section[data-race-index="${index}"]`
+        );
+        if (raceElement) {
+          raceElement.remove();
+        }
+      }
+
+      function addCandidate(raceIndex) {
+        const candidateList = document.getElementById(
+          `candidateList_${raceIndex}`
+        );
+        const candidateIndex = candidateList.children.length; // Start index after the header row (index 0)
+
+        const candidateItem = document.createElement("div");
+        candidateItem.className = "candidate-item";
+
+        // Inject the region select box here
+        const regionSelectHtml = createRegionSelect(`races[${raceIndex}][candidates][${candidateIndex}][region]`);
+
+        candidateItem.innerHTML = `
+            <input type="text" name="races[${raceIndex}][candidates][${candidateIndex}][name]" placeholder="Candidate Name/Option" required>
+            <input type="text" name="races[${raceIndex}][candidates][${candidateIndex}][party]" placeholder="Party/Affiliation">
+            <input type="text" name="races[${raceIndex}][candidates][${candidateIndex}][photoUrl]" placeholder="Photo URL/Icon (e.g. 👩‍💼)">
+            ${regionSelectHtml}
+            <button type="button" class="btn btn-danger btn-sm" onclick="removeCandidate(this)">✕</button>
+        `;
+        candidateList.appendChild(candidateItem);
+      }
+
+      function removeCandidate(button) {
+        // Ensure we don't remove the header row (which is the first child)
+        const candidateItem = button.closest(".candidate-item");
+        if (candidateItem && candidateItem.parentElement.children.length > 2) { // 2 = Header + 1 minimum candidate
+            candidateItem.remove();
+        } else {
+            alert("You must have at least one candidate/option per race.");
+        }
+      }
+
+      // Initialize with one race on load
+      window.onload = addRace;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,1115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRUECAST - Voter Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            overflow: hidden;
+            max-width: 800px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 600px;
+        }
+
+        .login-visual {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-visual::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000"><circle fill="rgba(255,255,255,0.1)" cx="200" cy="300" r="150"/><circle fill="rgba(255,255,255,0.05)" cx="800" cy="700" r="200"/></svg>');
+            background-size: cover;
+        }
+
+        .visual-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .visual-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .visual-content p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+        .security-badges {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .security-badge {
+            text-align: center;
+            opacity: 0.8;
+        }
+
+        .security-badge-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-form {
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .logo p {
+            color: #7f8c8d;
+            font-size: 1rem;
+        }
+
+        .auth-methods {
+            margin-bottom: 2rem;
+        }
+
+        .auth-method {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .auth-method:hover {
+            border-color: #3498db;
+            background: #ecf8ff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .auth-method.active {
+            border-color: #3498db;
+            background: #ecf8ff;
+        }
+
+        .auth-method-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .auth-method-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .auth-method-icon {
+            font-size: 2rem;
+        }
+
+        .auth-method-details h4 {
+            color: #2c3e50;
+            margin-bottom: 0.3rem;
+        }
+
+        .auth-method-details p {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+
+        .auth-method-status {
+            font-size: 1.5rem;
+            color: #27ae60;
+        }
+
+        .auth-content {
+            display: none;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .auth-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        input {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #3498db;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .biometric-capture {
+            text-align: center;
+            padding: 2rem;
+            border: 2px dashed #bdc3c7;
+            border-radius: 15px;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+
+        .biometric-capture:hover {
+            border-color: #3498db;
+            background: #ecf8ff;
+        }
+
+        .biometric-icon {
+            font-size: 4rem;
+            color: #3498db;
+            margin-bottom: 1rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-success {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #3498db;
+            border: 2px solid #3498db;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .otp-container {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+
+        .otp-input {
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            background: #f8f9fa;
+        }
+
+        .otp-input:focus {
+            border-color: #3498db;
+            background: white;
+        }
+
+        .login-options {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .login-options a {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .login-options a:hover {
+            text-decoration: underline;
+        }
+
+        .security-info {
+            background: #e8f8f5;
+            border-left: 4px solid #27ae60;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 5px;
+            font-size: 0.9rem;
+        }
+
+        .error-message {
+            background: #fdf2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: none;
+        }
+
+        .success-message {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            color: #15803d;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .verification-steps {
+            margin-top: 2rem;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .step.completed {
+            background: #f0fdf4;
+            color: #15803d;
+        }
+
+        .step.active {
+            background: #eff6ff;
+            color: #1e40af;
+        }
+
+        .step-icon {
+            margin-right: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .login-container {
+                grid-template-columns: 1fr;
+                max-width: 400px;
+            }
+
+            .login-visual {
+                display: none;
+            }
+
+            .login-form {
+                padding: 2rem;
+            }
+
+            .auth-method {
+                padding: 1rem;
+            }
+
+            .otp-container {
+                gap: 0.3rem;
+            }
+
+            .otp-input {
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-visual">
+            <div class="visual-content">
+                <h2>🗳️ Secure Login</h2>
+                <p>Multi-factor authentication ensures your vote remains secure and private. Choose from multiple authentication methods for maximum security.</p>
+                
+                <div class="security-badges">
+                    <div class="security-badge">
+                        <span class="security-badge-icon">🔐</span>
+                        <span>256-bit Encryption</span>
+                    </div>
+                    <div class="security-badge">
+                        <span class="security-badge-icon">⛓️</span>
+                        <span>Blockchain Verified</span>
+                    </div>
+                    <div class="security-badge">
+                        <span class="security-badge-icon">🛡️</span>
+                        <span>Biometric Secure</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="login-form">
+            <div class="logo">
+                <h1>TRUECAST</h1>
+                <p>Voter Authentication</p>
+            </div>
+            
+            <div class="success-message" id="successMessage" style="display: {{ 'block' if success else 'none' }}">
+                {% if success %}
+                    {{ success }}
+                {% else %}
+                    Successfully registered. Please log in!
+                {% endif %}
+            </div>
+
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="voterId">Voter ID or Email</label>
+                    <input type="text" id="voterId" name="voterId" required placeholder="Enter your Voter ID or email" oninput="checkIdentity()">
+                </div>
+
+                <div class="auth-methods">
+                    <div class="auth-method" onclick="selectAuthMethod('biometric')">
+                        <div class="auth-method-header">
+                            <div class="auth-method-info">
+                                <span class="auth-method-icon">👤</span>
+                                <div class="auth-method-details">
+                                    <h4>Biometric Authentication</h4>
+                                    <p>Face recognition or fingerprint</p>
+                                </div>
+                            </div>
+                            <span class="auth-method-status" id="biometric-status"></span>
+                        </div>
+                        <div class="biometric-capture" id="biometric-capture" data-photo-b64="">
+    <video id="loginWebcamVideo" autoplay style="width: 100%; max-width: 300px; display: none; margin-bottom: 1rem; border-radius: 10px;"></video>
+    <canvas id="loginWebcamCanvas" style="display: none;"></canvas>
+
+    <button type="button" class="btn btn-primary" onclick="startLoginFaceCapture()">
+        Start Biometric Scan
+    </button>
+    <button type="button" class="btn btn-success" id="loginCaptureBtn" style="display: none;" onclick="captureAndVerifyLoginFace()">
+        Capture & Verify
+    </button>
+</div>
+                    </div>
+
+                    <div class="auth-method" onclick="selectAuthMethod('otp')">
+                        <div class="auth-method-header">
+                            <div class="auth-method-info">
+                                <span class="auth-method-icon">📱</span>
+                                <div class="auth-method-details">
+                                    <h4>SMS/Email OTP</h4>
+                                    <p>One-time password verification</p>
+                                </div>
+                            </div>
+                            <span class="auth-method-status" id="otp-status"></span>
+                        </div>
+                        <div class="auth-content" id="otp-content">
+                            <button type="button" class="btn btn-outline" onclick="sendOTP()" id="sendOtpBtn">
+                                Send OTP
+                            </button>
+                            <div id="otpInputSection" style="display: none;">
+                                <p>Enter the 6-digit code sent to your registered phone/email:</p>
+                                <div class="otp-container">
+                                    <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 0)">
+                                    <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 1)">
+                                    <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 2)">
+                                    <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 3)">
+                                    <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 4)">
+                                    <input type="text" class="otp-input" maxlength="1" oninput="moveToNext(this, 5)">
+                                </div>
+                                <button type="button" class="btn btn-primary" onclick="verifyOTP()">
+                                    Verify OTP
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="auth-method" onclick="selectAuthMethod('pin')">
+                        <div class="auth-method-header">
+                            <div class="auth-method-info">
+                                <span class="auth-method-icon">🔢</span>
+                                <div class="auth-method-details">
+                                    <h4>Backup PIN</h4>
+                                    <p>6-digit security PIN</p>
+                                </div>
+                            </div>
+                            <span class="auth-method-status" id="pin-status"></span>
+                        </div>
+                        <div class="auth-content" id="pin-content">
+                            <div class="form-group">
+                                <label for="backupPin">Enter your 6-digit backup PIN</label>
+                                <input type="password" id="backupPin" name="backupPin" maxlength="6" placeholder="••••••">
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="verifyPIN()">
+                                Verify PIN
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="verification-steps" id="verificationSteps" style="display: none;">
+                    <h4>Authentication Progress:</h4>
+                    <div class="step" id="step1">
+                        <span class="step-icon">⏳</span>
+                        <span>Identity Verification</span>
+                    </div>
+                    <div class="step" id="step2">
+                        <span class="step-icon">⏳</span>
+                        <span>Multi-Factor Authentication</span>
+                    </div>
+                </div>
+
+                <div class="error-message" id="errorMessage"></div>
+                <div class="success-message" id="loginSuccessMessage"></div>
+
+                <button type="submit" class="btn btn-success" id="loginBtn" style="display: none;">
+                    Access Voting Dashboard
+                </button>
+            </form>
+
+            <div class="security-info">
+                <strong>🔒 Security Notice:</strong> Your session is encrypted and monitored for security. Never share your authentication credentials with anyone.
+            </div>
+
+            <div class="login-options">
+                <p>Need help? <a href="/help">Contact Support</a></p>
+                <p>New voter? <a href="/voter-register">Register Here</a></p>
+                <p><a href="/geo-verification">Having location issues?</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedAuthMethod = null;
+        let authenticationSteps = {
+            identity: false,
+            mfa: false,
+            geo: false,
+            blockchain: false
+        };
+        
+        // --- NEW: Function to check Identity on input ---
+        function checkIdentity() {
+            const voterIdInput = document.getElementById('voterId').value.trim();
+            
+            // Simple client-side check for presence of data
+            if (voterIdInput.length > 5) { 
+                if (!authenticationSteps.identity) {
+                    authenticationSteps.identity = true;
+                    updateStep('identity', 'completed'); 
+                    document.getElementById('verificationSteps').style.display = 'block'; // Show progress steps
+                }
+            } else {
+                if (authenticationSteps.identity) {
+                    authenticationSteps.identity = false;
+                    updateStep('identity', 'active');
+                }
+            }
+        }
+        // --- END NEW FUNCTION ---
+
+
+        function selectAuthMethod(method) {
+            // Clear previous selections
+            document.querySelectorAll('.auth-method').forEach(elem => {
+                elem.classList.remove('active');
+            });
+            document.querySelectorAll('.auth-content').forEach(elem => {
+                elem.classList.remove('active');
+            });
+
+            // Activate selected method
+            event.currentTarget.classList.add('active');
+            document.getElementById(`${method}-content`).classList.add('active');
+            selectedAuthMethod = method;
+            hideMessage(); // Clear any previous errors
+
+            // Reset MFA status visual if changing methods
+            document.getElementById('pin-status').innerHTML = '';
+            document.getElementById('biometric-status').innerHTML = '';
+            document.getElementById('otp-status').innerHTML = '';
+            authenticationSteps.mfa = false;
+        }
+
+        function sendOTP() {
+    const voterId = document.getElementById('voterId').value.trim();
+    if (!voterId) {
+        showMessage('Please enter your Voter ID or email first.', 'error');
+        return;
+    }
+    
+    // Note: We allow sending OTP even if "identity" isn't checked locally yet,
+    // as the backend performs the definitive check.
+    
+    const sendBtn = document.getElementById('sendOtpBtn');
+    sendBtn.innerHTML = '<span class="loading-spinner"></span> Sending...';
+    sendBtn.disabled = true;
+
+    fetch('/api/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ voterId: voterId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('otpInputSection').style.display = 'block';
+            sendBtn.innerHTML = 'Resend OTP';
+            sendBtn.disabled = false;
+            showMessage(data.message, 'loginSuccessMessage');
+            
+            // Focus on first input box
+            setTimeout(() => document.querySelector('.otp-input').focus(), 500);
+        } else {
+            showMessage(data.error, 'error');
+            sendBtn.innerHTML = 'Send OTP';
+            sendBtn.disabled = false;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showMessage('Network error sending OTP.', 'error');
+        sendBtn.innerHTML = 'Send OTP';
+        sendBtn.disabled = false;
+    });
+}
+
+        function moveToNext(current, index) {
+            if (current.value.length === 1) {
+                const nextInput = document.querySelectorAll('.otp-input')[index + 1];
+                if (nextInput) {
+                    nextInput.focus();
+                }
+            }
+        }
+
+        function verifyOTP() {
+    const otpInputs = document.querySelectorAll('.otp-input');
+    const otp = Array.from(otpInputs).map(input => input.value).join('');
+    
+    if (otp.length !== 6) {
+        showMessage('Please enter the complete 6-digit OTP.', 'error');
+        return;
+    }
+
+    const verifyBtn = document.querySelector('#otpInputSection .btn-primary');
+    const originalText = verifyBtn.textContent;
+    verifyBtn.innerHTML = '<span class="loading-spinner"></span> Verifying...';
+    verifyBtn.disabled = true;
+
+    fetch('/api/verify-otp-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ otp: otp })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('otp-status').innerHTML = '✅';
+            showMessage(data.message, 'loginSuccessMessage');
+            
+            // Complete the MFA step visually
+            completeAuthStep('mfa');
+            
+            // If this was the final step or the only step needed, redirect
+            setTimeout(() => {
+                window.location.href = data.redirect;
+            }, 1500);
+        } else {
+            document.getElementById('otp-status').innerHTML = '❌';
+            showMessage(data.error, 'error');
+            verifyBtn.innerHTML = originalText;
+            verifyBtn.disabled = false;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showMessage('Network error verifying OTP.', 'error');
+        verifyBtn.innerHTML = originalText;
+        verifyBtn.disabled = false;
+    });
+}
+
+        function startBiometricAuth() {
+            const captureDiv = document.getElementById('biometric-capture');
+            captureDiv.innerHTML = `
+                <div class="biometric-icon">⏳</div>
+                <h4>Scanning...</h4>
+                <p>Please look at the camera or place finger on sensor</p>
+                <div class="loading-spinner"></div>
+            `;
+
+            setTimeout(() => {
+                captureDiv.innerHTML = `
+                    <div class="biometric-icon">✅</div>
+                    <h4>Biometric Verified</h4>
+                    <p>Identity confirmed successfully</p>
+                `;
+                document.getElementById('biometric-status').innerHTML = '✅';
+                showMessage('Biometric authentication successful!', 'loginSuccessMessage');
+                completeAuthStep('mfa');
+            }, 3000);
+        }
+
+        // truecast_voter_login.html (Updated verifyPIN function)
+
+        function verifyPIN() {
+            const voterId = document.getElementById('voterId').value;
+            const pin = document.getElementById('backupPin').value;
+            if (!voterId) {
+                showMessage('Please enter your Voter ID or email first.', 'error');
+                return;
+            }
+            if (pin.length !== 6) {
+                showMessage('Please enter your 6-digit PIN.', 'error');
+                return;
+            }
+
+            // --- AJAX Call for Backend PIN Verification & Login ---
+            const pinBtn = document.querySelector('#pin-content button');
+            pinBtn.innerHTML = '<span class="loading-spinner"></span> Verifying...';
+            pinBtn.disabled = true;
+
+            // We send the PIN and voter ID for the backend to handle verification AND session creation.
+            // We also pass the window.location.search to include the ?next= parameter
+            fetch('/voter-login' + window.location.search, { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    voterId: voterId, 
+                    backupPin: pin,
+                })
+            })
+            .then(response => {
+                // Check for non-JSON responses (like 500 errors)
+                if (!response.ok) {
+                    throw new Error('Server returned an error: ' + response.status);
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data.success) {
+                    // *** THIS IS THE FIX ***
+                    // The server has successfully authenticated AND logged us in.
+                    // We must redirect now, not show another button.
+                    
+                    document.getElementById('pin-status').innerHTML = '✅';
+                    showMessage(data.message + ' Redirecting...', 'loginSuccessMessage');
+                    
+                    // Manually update visual steps for user feedback
+                    document.getElementById('verificationSteps').style.display = 'block';
+                    updateStep('identity', 'completed');
+                    updateStep('mfa', 'completed');
+                    updateStep('geo', 'completed');
+                    updateStep('blockchain', 'completed');
+
+                    // Perform the redirect from the server's response
+                    setTimeout(() => {
+                        window.location.href = data.redirect; 
+                    }, 1000);
+                    
+                } else {
+                // FAILURE PATH
+                    document.getElementById('pin-status').innerHTML = '❌';
+                    showMessage(data.error || 'PIN verification failed. Try again.', 'error');
+                    authenticationSteps.mfa = false;
+                }
+            })
+            .catch(error => {
+                console.error('PIN Verification Error:', error);
+                // This catch will also handle the JSON parse error if server sends HTML/500
+                showMessage('Network error during PIN verification. Check server console.', 'error');
+                document.getElementById('pin-status').innerHTML = '❌';
+            })
+            .finally(() => {
+                // Re-enable button only on failure (on success, we're redirecting)
+                if (document.getElementById('pin-status').innerHTML !== '✅') {
+                    pinBtn.innerHTML = 'Verify PIN';
+                    pinBtn.disabled = false;
+                }
+            });
+        }
+
+        let loginCurrentStream = null;
+
+function startLoginFaceCapture() {
+    const voterId = document.getElementById('voterId').value.trim();
+    if (!voterId) {
+        showMessage('Please enter your Voter ID or email first.', 'error');
+        return;
+    }
+
+    const video = document.getElementById('loginWebcamVideo');
+    const startBtn = event.currentTarget;
+    const captureBtn = document.getElementById('loginCaptureBtn');
+
+    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+        .then(function(stream) {
+            loginCurrentStream = stream;
+            video.srcObject = stream;
+            video.style.display = 'block';
+            startBtn.style.display = 'none';
+
+            video.onloadedmetadata = (e) => {
+                captureBtn.style.display = 'inline-block';
+            };
+
+            document.getElementById('biometric-status').innerHTML = 'Camera Live 🟢';
+        })
+        .catch(function(error) {
+            console.error("Camera access error: ", error);
+            showMessage('Camera access failed. Please ensure permissions are granted.', 'error');
+            document.getElementById('biometric-status').innerHTML = '❌';
+        });
+}
+
+function stopLoginCameraStream() {
+    if (loginCurrentStream) {
+        loginCurrentStream.getTracks().forEach(track => track.stop());
+        loginCurrentStream = null;
+    }
+}
+
+function captureAndVerifyLoginFace() {
+    const voterId = document.getElementById('voterId').value.trim();
+    const video = document.getElementById('loginWebcamVideo');
+    const canvas = document.getElementById('loginWebcamCanvas');
+    const captureBtn = document.getElementById('loginCaptureBtn');
+
+    if (!loginCurrentStream) return;
+
+    // 1. Capture Photo
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+    const loginPhotoData = canvas.toDataURL('image/png'); 
+
+    stopLoginCameraStream(); // Stop stream immediately after capture
+
+    captureBtn.innerHTML = '<span class="loading-spinner"></span> Verifying...';
+    captureBtn.disabled = true;
+
+    // 2. Call the server-side verification API
+    fetch('/api/verify-face-login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+            voterId: voterId, 
+            loginPhotoBase64: loginPhotoData 
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('biometric-status').innerHTML = '✅';
+            showMessage(data.message, 'loginSuccessMessage');
+
+            // Complete MFA step and redirect to dashboard
+            completeAuthStep('mfa');
+
+            setTimeout(() => {
+                window.location.href = data.redirect;
+            }, 1500);
+
+        } else {
+            document.getElementById('biometric-status').innerHTML = '❌';
+            showMessage(data.error || 'Face verification failed.', 'error');
+            captureBtn.innerHTML = 'Capture & Verify';
+            captureBtn.disabled = false;
+        }
+    })
+    .catch(error => {
+        console.error('Login Verification Error:', error);
+        showMessage('Network error during face verification.', 'error');
+        captureBtn.innerHTML = 'Capture & Verify';
+        captureBtn.disabled = false;
+    });
+}
+
+        function completeAuthStep(stepType) {
+            authenticationSteps[stepType] = true;
+            
+            // When MFA is complete (via PIN/OTP), immediately mark ALL steps complete
+            // and bypass the slow simulation timeouts to enable the button.
+            if (stepType === 'mfa') {
+                // Ensure the progress steps are visible
+                document.getElementById('verificationSteps').style.display = 'block';
+                
+                // 1. Mark Identity (step1) complete (Redundant but safe)
+                authenticationSteps.identity = true; 
+                updateStep('identity', 'completed');
+                
+                // 2. Mark MFA (step2) complete
+                updateStep('mfa', 'completed'); 
+
+                // 3. Mark Geo-location (step3) complete (Simulated success)
+                authenticationSteps.geo = true;
+                updateStep('geo', 'completed');
+                
+                // 4. Mark Blockchain (step4) complete (Simulated success)
+                authenticationSteps.blockchain = true;
+                updateStep('blockchain', 'completed');
+                
+                // Immediately enable the final access button
+                completeLogin(); 
+            }
+        }
+
+        function updateStep(stepName, status) {
+            let stepId;
+            if (stepName === 'identity') { stepId = 'step1'; }
+            else if (stepName === 'mfa') { stepId = 'step2'; }
+    
+            else { return; }
+            
+            const step = document.getElementById(stepId);
+            step.className = `step ${status}`;
+            
+            if (status === 'completed') {
+                step.querySelector('.step-icon').textContent = '✅';
+            } else if (status === 'active') {
+                step.querySelector('.step-icon').textContent = '⏳';
+            }
+        }
+        
+        function completeLogin() {
+            if (Object.values(authenticationSteps).every(step => step === true)) {
+                document.getElementById('loginBtn').style.display = 'block';
+                // Show a generic success message that applies across all auth methods
+                showMessage('Authentication complete! Click below to access your voting dashboard.', 'loginSuccessMessage');
+            }
+        }
+        
+        // Helper to display messages to the correct div
+        function showMessage(message, type) {
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('loginSuccessMessage');
+            
+            if (type === 'error') {
+                errorDiv.textContent = message;
+                errorDiv.style.display = 'block';
+                successDiv.style.display = 'none';
+                document.getElementById('successMessage').style.display = 'none'; // Hide registration message
+            } else {
+                // Use the dedicated login success div for all in-page actions
+                successDiv.textContent = message;
+                successDiv.style.display = 'block';
+                errorDiv.style.display = 'none';
+                document.getElementById('successMessage').style.display = 'none'; // Hide registration message
+            }
+        }
+
+        function hideMessage() {
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('loginSuccessMessage').style.display = 'none';
+        }
+
+        // Form submission (CRITICAL FIX)
+        // truecast_voter_login.html (Inside loginForm submit handler)
+
+document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    // Check if all authentication steps (simulated) are complete
+    if (Object.values(authenticationSteps).every(step => step === true)) {
+        
+        const voterId = document.getElementById('voterId').value;
+        const loginBtn = document.getElementById('loginBtn');
+        const pin = document.getElementById('backupPin').value; // Get the PIN value
+        
+        let payload = { voterId: voterId };
+
+        // CRITICAL FIX: Include PIN in the final payload ONLY if the PIN method was selected.
+        if (selectedAuthMethod === 'pin') {
+            payload.backupPin = pin;
+        }
+        
+        loginBtn.innerHTML = '<span class="loading-spinner"></span> Accessing...';
+        loginBtn.disabled = true;
+
+        // Send the POST request to the Flask backend
+        fetch('/voter-login' + window.location.search, { // Include ?next= parameter
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload) // Use the payload that includes the PIN conditionally
+        })
+        .then(response => {
+            // Check if the response is valid JSON (i.e., not HTML error)
+            if (!response.ok || response.headers.get('Content-Type').indexOf('application/json') === -1) {
+                // If the server returned HTML (e.g., a 500 error page), we throw an error.
+                throw new Error('Server returned unexpected non-JSON response.');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                showMessage(data.message + ' Redirecting...', 'loginSuccessMessage');
+                setTimeout(() => {
+                    window.location.href = data.redirect; 
+                }, 1000);
+            } else {
+                showMessage(data.error || 'Authentication failed on server.', 'error');
+                loginBtn.innerHTML = 'Access Voting Dashboard';
+                loginBtn.disabled = false;
+            }
+        })
+        .catch(error => {
+            console.error('Login error:', error);
+            showMessage('Network error during login. Check server console for 500 status.', 'error');
+            loginBtn.innerHTML = 'Access Voting Dashboard';
+            loginBtn.disabled = false;
+        });
+
+    } else {
+        showMessage('Please complete all authentication steps.', 'error');
+    }
+});
+
+        // Auto-focus on voter ID field
+        document.getElementById('voterId').focus();
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                hideMessage();
+            }
+        });
+
+        // PIN input formatting
+        document.getElementById('backupPin').addEventListener('input', function(e) {
+            e.target.value = e.target.value.replace(/\D/g, '');
+        });
+
+        // OTP input handling
+        document.querySelectorAll('.otp-input').forEach((input, index) => {
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && !this.value) {
+                    const prevInput = document.querySelectorAll('.otp-input')[index - 1];
+                    if (prevInput) {
+                        prevInput.focus();
+                    }
+                }
+            });
+        });
+        
+        // Initialize identity status on load
+        window.onload = function() {
+            // Check identity status immediately on load (if user data is pre-filled/remembered)
+            checkIdentity(); 
+        };
+    </script>
+</body>
+</html>

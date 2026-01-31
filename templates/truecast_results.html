@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRUECAST - Voting Results</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        
+        /* Main Container */
+        .container {
+            max-width: 1000px; /* Slimmer for focus */
+            margin: 0 auto;
+            padding: 2rem 20px;
+        }
+
+        /* Results Card Style */
+        .results-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+        }
+        
+        .results-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .results-title {
+            font-size: 2rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+        
+        .results-subtitle {
+            color: #7f8c8d;
+        }
+        
+        .race-card {
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            overflow: hidden; /* For rounded corners on bars */
+        }
+
+        .race-title {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #3498db;
+        }
+
+        .candidate-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .candidate-item {
+            /* ORIGINAL: display: grid; grid-template-columns: 2fr 1fr 100px; */ 
+            /* MODIFIED: Use inline style to override the complex grid and only use two columns */
+            display: grid;
+            grid-template-columns: 3fr 1fr; /* Name | Count */
+            align-items: center;
+            padding: 0.5rem 0;
+            margin-bottom: 0.5rem;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        
+        /* Winner Highlight */
+        .candidate-item.winner {
+            background: #e6ffed; /* Light green background */
+            border: 1px solid #27ae60;
+            font-weight: 600;
+        }
+        
+        .candidate-name {
+            font-weight: 600;
+            color: #2c3e50;
+            padding-left: 10px;
+        }
+        
+        /* Vote Bar Styling (STILL HERE BUT UNUSED) */
+        .vote-bar-container {
+            width: 90%;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 0 10px;
+            display: none; /* Hiding the bar */
+        }
+
+        .vote-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3498db 0%, #27ae60 100%);
+            transition: width 0.5s ease;
+        }
+
+        .percentage-display {
+            font-weight: bold;
+            color: #3498db;
+            text-align: right;
+            display: none; /* Hiding percentage */
+        }
+
+        .candidate-votes {
+            font-weight: bold;
+            color: #2c3e50;
+            text-align: right;
+            padding-right: 10px;
+        }
+        
+        .margin-text {
+            text-align: center;
+            margin-top: 1rem;
+            padding: 0.5rem;
+            background: #f0f3f5;
+            border-radius: 5px;
+            font-size: 0.95rem;
+        }
+        
+        /* Security Alert */
+        .alert-security {
+            background: #d1fae5;
+            border: 1px solid #a7f3d0;
+            color: #059669;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .no-results-message {
+            text-align: center;
+            padding: 50px;
+            font-size: 1.5rem;
+            color: #7f8c8d;
+        }
+        
+        .alert-restricted {
+            background: #fdf2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">🗳️ TRUECAST ELECTION RESULTS</div>
+            <a href="/vote-verification" style="color: white; text-decoration: none; padding: 0.5rem 1rem; border: 1px solid white; border-radius: 5px;">Verify My Vote</a>
+        </div>
+    </div>
+
+    <div class="container">
+        {% if published_list %}
+            <div style="margin-bottom: 2rem; padding: 1.5rem; background: #e8f5e9; border-radius: 10px; border: 1px solid #c8e6c9;">
+                <h3 style="color: #2e7d32; margin-bottom: 1rem;">View Other Published Elections:</h3>
+                <select id="election-select" onchange="window.location.href='/results?election_id=' + this.value" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc; width: 100%; max-width: 400px; font-size: 1rem;">
+                    {% for pub_e in published_list %}
+                        <option value="{{ pub_e.id }}" {% if pub_e.id == current_election_id %}selected{% endif %}>
+                            {{ pub_e.title }} (Published: {{ pub_e.endDate.split('T')[0] }})
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+        {% endif %}
+        
+        {% if message %}
+            <div class="alert-restricted">
+                {{ message }}
+            </div>
+        {% endif %}
+        
+        <div class="results-card">
+            <div class="results-header">
+                <h2 class="results-title">{{ election_title }}</h2>
+                <p class="results-subtitle">
+                    Certified results for all races are now published.
+                </p>
+            </div>
+            
+            {% if results %}
+                <div class="alert-security">
+                    ✅ Results Certified: These results passed a cryptographic chain audit before publication, ensuring integrity.
+                </div>
+
+                <div id="results-display">
+                    {% for race_slug, candidates in results.items() %}
+                        <div class="race-card">
+                            <h3 class="race-title">{{ race_slug | replace('-', ' ') | capitalize }}</h3>
+                            <ul class="candidate-list">
+                                <!-- {% set total_votes_in_race = candidates.values() | sum %} -->
+                                <!-- {% set sorted_candidates = candidates.items() | sort(attribute=1, reverse=true) %} -->
+                                
+                                <!-- {% set winner_count = sorted_candidates[0][1] if sorted_candidates | length > 0 else 0 %} -->
+                                <!-- {% set runner_up_count = sorted_candidates[1][1] if sorted_candidates | length > 1 else 0 %}
+                                {% set margin = winner_count - runner_up_count %}
+                                {% set margin_percentage = (margin / total_votes_in_race * 100) | round(2) if total_votes_in_race > 0 else 0 %} -->
+
+                                {% for candidate_slug, count in sorted_candidates %}
+                                    {% set percentage = (count / total_votes_in_race * 100) | round(1) if total_votes_in_race > 0 else 0 %}
+                                    <li class="candidate-item {% if loop.first %}winner{% endif %}">
+                                        
+                                        <div style="display: flex; align-items: center;">
+                                            <span class="candidate-name">{{ candidate_slug | replace('-', ' ') | capitalize }}</span>
+                                            {% if loop.first %}<span style="font-size: 1.5rem; margin-left: 10px;">🥇</span>{% endif %}
+                                            <div class="vote-bar-container" style="width: {{ percentage }}%;"></div>
+                                        </div>
+                                        
+                                        <span class="percentage-display">{{ percentage }}%</span>
+                                        
+                                        <span class="candidate-votes">{{ count }} Votes</span>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            
+                            {% if sorted_candidates | length > 1 %}
+                                <p class="margin-text">
+                                    Winner: {{ sorted_candidates[0][0] | replace('-', ' ') | capitalize }} | 
+                                    Margin of Victory: {{ margin }} votes ({{ margin_percentage }}%)
+                                </p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% elif not message %}
+                <div class="no-results-message">
+                    <p>No certified results have been recorded for this election yet.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>
